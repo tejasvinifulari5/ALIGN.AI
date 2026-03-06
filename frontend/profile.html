@@ -1,389 +1,733 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Profile - ALIGN.AI</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
     <style>
-        body {
-            background-color: #f8fafc;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      body {
+        background-color: #f8fafc;
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+          Arial, sans-serif;
+      }
+      .header-bg {
+        background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+      }
+      #profile-preview {
+        object-fit: cover;
+      }
+      .custom-shadow {
+        box-shadow:
+          0 10px 25px -5px rgba(0, 0, 0, 0.05),
+          0 8px 10px -6px rgba(0, 0, 0, 0.05);
+      }
+      .view-transition {
+        transition:
+          opacity 0.2s ease-in-out,
+          transform 0.2s ease-in-out;
+      }
+      .hidden-view {
+        display: none;
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      /* Toast notification animation */
+      @keyframes slideUp {
+        from {
+          transform: translateY(100%);
+          opacity: 0;
         }
-        .header-bg {
-            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+        to {
+          transform: translateY(0);
+          opacity: 1;
         }
-        #profile-preview {
-            object-fit: cover;
-        }
-        .custom-shadow {
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
-        }
-        .view-transition {
-            transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
-        }
-        .hidden-view {
-            display: none;
-            opacity: 0;
-            transform: translateY(10px);
-        }
-        /* Toast notification animation */
-        @keyframes slideUp {
-            from { transform: translateY(100%); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-        .toast-active {
-            display: flex;
-            animation: slideUp 0.3s ease-out forwards;
-        }
+      }
+      .toast-active {
+        display: flex;
+        animation: slideUp 0.3s ease-out forwards;
+      }
+      /* Modal Overlay */
+      #modal-overlay {
+        background-color: rgba(15, 23, 42, 0.6);
+        backdrop-filter: blur(4px);
+      }
     </style>
-</head>
-<body class="min-h-screen flex flex-col">
-
+  </head>
+  <body class="min-h-screen flex flex-col">
     <!-- Toast Notification -->
-    <div id="toast" class="fixed bottom-10 left-1/2 -translate-x-1/2 z-50 hidden items-center gap-3 bg-slate-900 text-white px-6 py-3 rounded-2xl shadow-2xl">
-        <i id="toast-icon" class="fas fa-check-circle text-green-400"></i>
-        <span id="toast-message" class="text-sm font-bold">Changes saved successfully!</span>
+    <div
+      id="toast"
+      class="fixed bottom-10 left-1/2 -translate-x-1/2 z-[100] hidden items-center gap-3 bg-slate-900 text-white px-6 py-3 rounded-2xl shadow-2xl"
+    >
+      <i id="toast-icon" class="fas fa-check-circle text-green-400"></i>
+      <span id="toast-message" class="text-sm font-bold"
+        >Changes saved successfully!</span
+      >
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div
+      id="modal-overlay"
+      class="fixed inset-0 z-[60] hidden flex items-center justify-center p-4"
+    >
+      <div
+        class="bg-white rounded-[2.5rem] p-8 max-w-sm w-full shadow-2xl transform transition-all"
+      >
+        <div
+          class="w-16 h-16 bg-rose-100 text-rose-600 rounded-2xl flex items-center justify-center text-2xl mb-6"
+        >
+          <i class="fas fa-shield-virus"></i>
+        </div>
+        <h3 class="text-2xl font-black text-slate-900 mb-2">Security Action</h3>
+        <p class="text-slate-500 font-medium leading-relaxed mb-8">
+          This will immediately end all active sessions on other computers and
+          mobile devices. You will stay logged in here.
+        </p>
+        <div class="flex flex-col gap-3">
+          <button
+            id="confirm-remove-btn"
+            onclick="executeGlobalSignout()"
+            class="w-full py-4 bg-rose-600 text-white rounded-2xl font-bold hover:bg-rose-700 transition-all active:scale-95"
+          >
+            Yes, Remove Other Devices
+          </button>
+          <button
+            onclick="toggleModal(false)"
+            class="w-full py-4 bg-slate-100 text-slate-600 rounded-2xl font-bold hover:bg-slate-200 transition-all"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
     </div>
 
     <!-- Header -->
     <header class="header-bg text-white p-8 pb-32 shadow-lg">
-        <div class="max-w-6xl mx-auto flex items-center justify-between">
-            <div class="flex items-center gap-4">
-                <button onclick="handleHeaderBack()" class="p-2 hover:bg-white/10 rounded-xl transition-all active:scale-90">
-                    <i class="fas fa-arrow-left text-xl"></i>
-                </button>
-                <h1 id="view-title" class="text-2xl font-bold tracking-tight">Account Settings</h1>
-            </div>
-            <div class="hidden md:flex items-center gap-3">
-                <span id="sync-text" class="text-sm font-medium opacity-80">Last synced: Just now</span>
-                <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-            </div>
+      <div class="max-w-6xl mx-auto flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <button
+            onclick="handleHeaderBack()"
+            class="p-2 hover:bg-white/10 rounded-xl transition-all active:scale-90"
+          >
+            <i class="fas fa-arrow-left text-xl"></i>
+          </button>
+          <h1 id="view-title" class="text-2xl font-bold tracking-tight">
+            Profile Settings
+          </h1>
         </div>
+        <div class="hidden md:flex items-center gap-3">
+          <span id="sync-text" class="text-sm font-medium opacity-80"
+            >Last synced: Just now</span
+          >
+          <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+        </div>
+      </div>
     </header>
 
     <!-- Main Content Container -->
     <main class="flex-grow max-w-6xl mx-auto w-full px-6 -mt-20 mb-16">
-        
-        <!-- MAIN PROFILE VIEW -->
-        <div id="view-main" class="view-transition grid grid-cols-1 lg:grid-cols-12 gap-8">
-            <!-- Left Column -->
-            <div class="lg:col-span-4 space-y-6">
-                <div class="bg-white rounded-[2rem] p-8 custom-shadow border border-gray-100 flex flex-col items-center">
-                    <div class="relative group">
-                        <div id="avatar-container" class="w-32 h-32 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-5xl font-bold border-4 border-white shadow-xl overflow-hidden transition-transform group-hover:scale-105">
-                            <span id="avatar-initial">T</span>
-                            <img id="profile-preview" class="hidden w-full h-full" alt="Profile">
-                        </div>
-                        <label for="photo-upload" class="absolute bottom-1 right-1 bg-blue-600 text-white p-3 rounded-full border-4 border-white shadow-lg hover:bg-blue-700 transition-all cursor-pointer active:scale-90">
-                            <i class="fas fa-camera text-sm"></i>
-                            <input type="file" id="photo-upload" class="hidden" accept="image/*">
-                        </label>
-                    </div>
-                    <h2 id="display-name-heading" class="mt-6 text-2xl font-black text-gray-900">Tejasvini 👋</h2>
-                    <p class="text-gray-500 font-medium">tejasvini@align.ai</p>
-                </div>
-
-                <div class="bg-white rounded-[2rem] p-4 custom-shadow border border-gray-100">
-                    <button onclick="switchView('security')" class="w-full flex items-center p-4 text-slate-700 font-bold hover:bg-slate-50 rounded-2xl transition-colors group">
-                        <i class="fas fa-shield-alt w-8 text-blue-500"></i>
-                        <span>Security & Privacy</span>
-                        <i class="fas fa-chevron-right ml-auto text-slate-300 text-xs group-hover:translate-x-1 transition-transform"></i>
-                    </button>
-                    <button onclick="switchView('help')" class="w-full flex items-center p-4 text-slate-700 font-bold hover:bg-slate-50 rounded-2xl transition-colors group">
-                        <i class="fas fa-question-circle w-8 text-purple-500"></i>
-                        <span>Help & Support</span>
-                        <i class="fas fa-chevron-right ml-auto text-slate-300 text-xs group-hover:translate-x-1 transition-transform"></i>
-                    </button>
-                </div>
+      <!-- MAIN PROFILE VIEW -->
+      <div
+        id="view-main"
+        class="view-transition grid grid-cols-1 lg:grid-cols-12 gap-8"
+      >
+        <!-- Left Column -->
+        <div class="lg:col-span-4 space-y-6">
+          <div
+            class="bg-white rounded-[2rem] p-8 custom-shadow border border-gray-100 flex flex-col items-center"
+          >
+            <div class="relative group">
+              <div
+                id="avatar-container"
+                class="w-32 h-32 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-5xl font-bold border-4 border-white shadow-xl overflow-hidden transition-transform group-hover:scale-105"
+              >
+                <span id="avatar-initial">T</span>
+                <img
+                  id="profile-preview"
+                  class="hidden w-full h-full"
+                  alt="Profile"
+                />
+              </div>
+              <label
+                for="photo-upload"
+                class="absolute bottom-1 right-1 bg-blue-600 text-white p-3 rounded-full border-4 border-white shadow-lg hover:bg-blue-700 transition-all cursor-pointer active:scale-90"
+              >
+                <i class="fas fa-camera text-sm"></i>
+                <input
+                  type="file"
+                  id="photo-upload"
+                  class="hidden"
+                  accept="image/*"
+                />
+              </label>
             </div>
+            <h2
+              id="display-name-heading"
+              class="mt-6 text-2xl font-black text-gray-900"
+            >
+              Tejasvini 👋
+            </h2>
+            <p class="text-gray-500 font-medium">tejasvini@align.ai</p>
+          </div>
 
-            <!-- Right Column -->
-            <div class="lg:col-span-8 space-y-8">
-                <div class="bg-white rounded-[2rem] p-8 custom-shadow border border-gray-100">
-                    <div class="flex items-center justify-between mb-8">
-                        <h3 class="text-xl font-black text-slate-900">Personal Information</h3>
-                        <button id="edit-btn" onclick="toggleEditMode()" class="px-6 py-2 bg-blue-50 text-blue-600 rounded-full font-bold text-sm hover:bg-blue-100 transition-colors">
-                            <i class="fas fa-edit mr-2"></i>Edit Profile
-                        </button>
-                    </div>
-                    <form id="profile-form" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="space-y-1 p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                            <label class="text-[10px] font-bold text-slate-400 uppercase">Full Name</label>
-                            <input type="text" id="input-name" value="Tejasvini Sharma" disabled class="w-full bg-transparent text-slate-800 font-bold outline-none">
-                        </div>
-                        <div class="space-y-1 p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                            <label class="text-[10px] font-bold text-slate-400 uppercase">Work Email</label>
-                            <input type="email" id="input-email" value="tejasvini@align.ai" disabled class="w-full bg-transparent text-slate-800 font-bold outline-none">
-                        </div>
-                        <div class="space-y-1 p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                            <label class="text-[10px] font-bold text-slate-400 uppercase">Body Weight (kg)</label>
-                            <input type="number" id="input-weight" value="62" disabled class="w-full bg-transparent text-slate-800 font-bold outline-none">
-                        </div>
-                        <div class="space-y-1 p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                            <label class="text-[10px] font-bold text-slate-400 uppercase">Height (cm)</label>
-                            <input type="number" id="input-height" value="168" disabled class="w-full bg-transparent text-slate-800 font-bold outline-none">
-                        </div>
-                    </form>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div class="bg-white rounded-[2rem] p-8 custom-shadow border border-gray-100">
-                        <h3 class="text-lg font-black text-slate-900 mb-6">Active Goal</h3>
-                        <div class="flex justify-between items-end mb-4">
-                            <span class="text-sm font-bold text-slate-700">Stability Mastery</span>
-                            <span class="text-2xl font-black text-blue-600">88%</span>
-                        </div>
-                        <div class="w-full bg-slate-100 rounded-full h-3 mb-4">
-                            <div class="bg-blue-600 h-3 rounded-full shadow-[0_0_10px_rgba(37,99,235,0.4)]" style="width: 88%"></div>
-                        </div>
-                        <p class="text-xs text-slate-500 leading-relaxed font-medium">You're 12% away from your monthly target. Keep it up!</p>
-                    </div>
-
-                    <div class="bg-white rounded-[2rem] p-8 custom-shadow border border-gray-100 space-y-6">
-                        <h3 class="text-lg font-black text-slate-900">Preferences</h3>
-                        <div class="flex items-center justify-between">
-                            <span class="text-sm font-bold text-slate-700">Email Notifications</span>
-                            <label class="relative inline-flex items-center cursor-pointer">
-                                <input type="checkbox" checked class="sr-only peer">
-                                <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-blue-600 peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
-                            </label>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <span class="text-sm font-bold text-slate-700">Cloud Sync</span>
-                            <label class="relative inline-flex items-center cursor-pointer">
-                                <input type="checkbox" checked class="sr-only peer">
-                                <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-blue-600 peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex flex-col sm:flex-row gap-4 pt-4">
-                    <button onclick="window.location.href='index.html'" class="flex-grow flex items-center justify-center p-4 bg-white text-rose-600 border-2 border-rose-50 rounded-2xl font-bold hover:bg-rose-50 transition-all active:scale-95">
-                        <i class="fas fa-sign-out-alt mr-2"></i> Logout from Session
-                    </button>
-                    <button id="save-btn" onclick="saveChanges()" class="px-8 py-4 bg-slate-900 text-white rounded-2xl font-bold hover:bg-slate-800 transition-all active:scale-95 disabled:opacity-50">
-                        Save All Changes
-                    </button>
-                </div>
-            </div>
+          <div
+            class="bg-white rounded-[2rem] p-4 custom-shadow border border-gray-100"
+          >
+            <button
+              onclick="switchView('security')"
+              class="w-full flex items-center p-4 text-slate-700 font-bold hover:bg-slate-50 rounded-2xl transition-colors group"
+            >
+              <i class="fas fa-shield-alt w-8 text-blue-500"></i>
+              <span>Security & Privacy</span>
+              <i
+                class="fas fa-chevron-right ml-auto text-slate-300 text-xs group-hover:translate-x-1 transition-transform"
+              ></i>
+            </button>
+            <button
+              onclick="switchView('help')"
+              class="w-full flex items-center p-4 text-slate-700 font-bold hover:bg-slate-50 rounded-2xl transition-colors group"
+            >
+              <i class="fas fa-question-circle w-8 text-purple-500"></i>
+              <span>Help & Support</span>
+              <i
+                class="fas fa-chevron-right ml-auto text-slate-300 text-xs group-hover:translate-x-1 transition-transform"
+              ></i>
+            </button>
+          </div>
         </div>
 
-        <!-- SECURITY VIEW -->
-        <div id="view-security" class="hidden-view view-transition max-w-3xl mx-auto space-y-8">
-            <!-- Password Section -->
-            <div class="bg-white rounded-[2rem] p-8 custom-shadow border border-gray-100">
-                <div class="flex items-center gap-4 mb-8">
-                    <div class="p-3 bg-blue-50 text-blue-600 rounded-2xl"><i class="fas fa-lock"></i></div>
-                    <h3 class="text-xl font-black text-slate-900">Change Password</h3>
-                </div>
-                <div class="space-y-6">
-                    <div class="space-y-2">
-                        <label class="text-xs font-bold text-slate-400 uppercase ml-2">Current Password</label>
-                        <input type="password" placeholder="••••••••" class="w-full bg-slate-50 p-4 rounded-2xl border border-slate-100 font-bold focus:ring-2 focus:ring-blue-100 outline-none">
-                    </div>
-                    <div class="space-y-2">
-                        <label class="text-xs font-bold text-slate-400 uppercase ml-2">New Password</label>
-                        <input type="password" placeholder="Enter new password" class="w-full bg-slate-50 p-4 rounded-2xl border border-slate-100 font-bold focus:ring-2 focus:ring-blue-100 outline-none">
-                    </div>
-                    <button onclick="handleSecurityUpdate()" class="w-full py-4 bg-blue-600 text-white rounded-2xl font-bold hover:bg-blue-700 transition-all active:scale-95">
-                        Update Security Credentials
-                    </button>
-                </div>
+        <!-- Right Column -->
+        <div class="lg:col-span-8 space-y-8">
+          <div
+            class="bg-white rounded-[2rem] p-8 custom-shadow border border-gray-100"
+          >
+            <div class="flex items-center justify-between mb-8">
+              <h3 class="text-xl font-black text-slate-900">
+                Personal Information
+              </h3>
+              <button
+                id="edit-btn"
+                onclick="toggleEditMode()"
+                class="px-6 py-2 bg-blue-50 text-blue-600 rounded-full font-bold text-sm hover:bg-blue-100 transition-colors"
+              >
+                <i class="fas fa-edit mr-2"></i>Edit Profile
+              </button>
             </div>
-            
-            <!-- Active Sessions Section -->
-            <div class="bg-white rounded-[2rem] p-8 custom-shadow border border-gray-100">
-                <div class="flex items-center gap-4 mb-8">
-                    <div class="p-3 bg-purple-50 text-purple-600 rounded-2xl"><i class="fas fa-desktop"></i></div>
-                    <h3 class="text-xl font-black text-slate-900">Active Sessions</h3>
-                </div>
-                <div class="space-y-4">
-                    <div class="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                        <div class="flex items-center gap-4">
-                            <div class="text-2xl text-slate-400"><i class="fas fa-laptop"></i></div>
-                            <div>
-                                <p class="font-bold text-slate-800">MacBook Pro 14"</p>
-                                <p class="text-xs text-slate-500">London, UK • Current Session</p>
-                            </div>
-                        </div>
-                        <span class="text-[10px] font-black uppercase text-green-500 bg-green-50 px-3 py-1 rounded-full">Active</span>
-                    </div>
-                    <div class="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                        <div class="flex items-center gap-4">
-                            <div class="text-2xl text-slate-400"><i class="fas fa-mobile-alt"></i></div>
-                            <div>
-                                <p class="font-bold text-slate-800">iPhone 15 Pro</p>
-                                <p class="text-xs text-slate-500">London, UK • 2 hours ago</p>
-                            </div>
-                        </div>
-                        <button onclick="showToast('Device logged out successfully')" class="text-[10px] font-black uppercase text-rose-500 hover:bg-rose-50 px-3 py-1 rounded-full transition-colors">Revoke</button>
-                    </div>
-                </div>
-                <button class="w-full mt-6 py-3 text-slate-500 font-bold text-sm hover:text-slate-800 transition-colors">
-                    Sign out from all other devices
-                </button>
+            <form
+              id="profile-form"
+              class="grid grid-cols-1 md:grid-cols-2 gap-6"
+            >
+              <div
+                class="space-y-1 p-4 bg-slate-50 rounded-2xl border border-slate-100"
+              >
+                <label class="text-[10px] font-bold text-slate-400 uppercase"
+                  >Full Name</label
+                >
+                <input
+                  type="text"
+                  id="input-name"
+                  value="Tejasvini Sharma"
+                  disabled
+                  class="w-full bg-transparent text-slate-800 font-bold outline-none"
+                />
+              </div>
+              <div
+                class="space-y-1 p-4 bg-slate-50 rounded-2xl border border-slate-100"
+              >
+                <label class="text-[10px] font-bold text-slate-400 uppercase"
+                  >Work Email</label
+                >
+                <input
+                  type="email"
+                  id="input-email"
+                  value="tejasvini@align.ai"
+                  disabled
+                  class="w-full bg-transparent text-slate-800 font-bold outline-none"
+                />
+              </div>
+              <div
+                class="space-y-1 p-4 bg-slate-50 rounded-2xl border border-slate-100"
+              >
+                <label class="text-[10px] font-bold text-slate-400 uppercase"
+                  >Body Weight (kg)</label
+                >
+                <input
+                  type="number"
+                  id="input-weight"
+                  value="62"
+                  disabled
+                  class="w-full bg-transparent text-slate-800 font-bold outline-none"
+                />
+              </div>
+              <div
+                class="space-y-1 p-4 bg-slate-50 rounded-2xl border border-slate-100"
+              >
+                <label class="text-[10px] font-bold text-slate-400 uppercase"
+                  >Height (cm)</label
+                >
+                <input
+                  type="number"
+                  id="input-height"
+                  value="168"
+                  disabled
+                  class="w-full bg-transparent text-slate-800 font-bold outline-none"
+                />
+              </div>
+            </form>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div
+              class="bg-white rounded-[2rem] p-8 custom-shadow border border-gray-100"
+            >
+              <h3 class="text-lg font-black text-slate-900 mb-6">
+                Active Goal
+              </h3>
+              <div class="flex justify-between items-end mb-4">
+                <span class="text-sm font-bold text-slate-700"
+                  >Stability Mastery</span
+                >
+                <span class="text-2xl font-black text-blue-600">88%</span>
+              </div>
+              <div class="w-full bg-slate-100 rounded-full h-3 mb-4">
+                <div
+                  class="bg-blue-600 h-3 rounded-full shadow-[0_0_10px_rgba(37,99,235,0.4)]"
+                  style="width: 88%"
+                ></div>
+              </div>
+              <p class="text-xs text-slate-500 leading-relaxed font-medium">
+                You're 12% away from your monthly target. Keep it up!
+              </p>
             </div>
+
+            <div
+              class="bg-white rounded-[2rem] p-8 custom-shadow border border-gray-100 space-y-6"
+            >
+              <h3 class="text-lg font-black text-slate-900">Preferences</h3>
+              <div class="flex items-center justify-between">
+                <span class="text-sm font-bold text-slate-700"
+                  >Email Notifications</span
+                >
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" checked class="sr-only peer" />
+                  <div
+                    class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-blue-600 peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all"
+                  ></div>
+                </label>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-sm font-bold text-slate-700">Cloud Sync</span>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" checked class="sr-only peer" />
+                  <div
+                    class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-blue-600 peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all"
+                  ></div>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row gap-4 pt-4">
+            <button
+              onclick="window.location.reload()"
+              class="flex-grow flex items-center justify-center p-4 bg-white text-rose-600 border-2 border-rose-50 rounded-2xl font-bold hover:bg-rose-50 transition-all active:scale-95"
+            >
+              <i class="fas fa-sign-out-alt mr-2"></i> Logout from Session
+            </button>
+            <button
+              id="save-btn"
+              onclick="saveChanges()"
+              class="px-8 py-4 bg-slate-900 text-white rounded-2xl font-bold hover:bg-slate-800 transition-all active:scale-95 disabled:opacity-50"
+            >
+              Save All Changes
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECURITY VIEW -->
+      <div
+        id="view-security"
+        class="hidden-view view-transition max-w-3xl mx-auto space-y-8"
+      >
+        <!-- Password Section -->
+        <div
+          class="bg-white rounded-[2rem] p-8 custom-shadow border border-gray-100"
+        >
+          <div class="flex items-center gap-4 mb-8">
+            <div class="p-3 bg-blue-50 text-blue-600 rounded-2xl">
+              <i class="fas fa-lock"></i>
+            </div>
+            <h3 class="text-xl font-black text-slate-900">Change Password</h3>
+          </div>
+          <div class="space-y-6">
+            <div class="space-y-2">
+              <label class="text-xs font-bold text-slate-400 uppercase ml-2"
+                >Current Password</label
+              >
+              <input
+                type="password"
+                placeholder="••••••••"
+                class="w-full bg-slate-50 p-4 rounded-2xl border border-slate-100 font-bold focus:ring-2 focus:ring-blue-100 outline-none"
+              />
+            </div>
+            <div class="space-y-2">
+              <label class="text-xs font-bold text-slate-400 uppercase ml-2"
+                >New Password</label
+              >
+              <input
+                type="password"
+                placeholder="Enter new password"
+                class="w-full bg-slate-50 p-4 rounded-2xl border border-slate-100 font-bold focus:ring-2 focus:ring-blue-100 outline-none"
+              />
+            </div>
+            <button
+              onclick="handleSecurityUpdate()"
+              class="w-full py-4 bg-blue-600 text-white rounded-2xl font-bold hover:bg-blue-700 transition-all active:scale-95"
+            >
+              Update Security Credentials
+            </button>
+          </div>
         </div>
 
-        <!-- HELP & SUPPORT VIEW -->
-        <div id="view-help" class="hidden-view view-transition max-w-3xl mx-auto space-y-6">
-            <div class="bg-white rounded-[2rem] p-8 custom-shadow border border-gray-100">
-                <h3 class="text-xl font-black text-slate-900 mb-8">Support Center</h3>
-                <p class="text-slate-500 mb-8 font-medium">Have questions or need assistance with your ALIGN profile? Our team is here to help.</p>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <a href="mailto:support@align.ai" class="flex flex-col items-center p-8 bg-slate-50 rounded-3xl border border-slate-100 hover:bg-blue-50 hover:border-blue-100 transition-all text-center group">
-                        <div class="w-16 h-16 bg-white rounded-2xl shadow-sm flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                            <i class="fas fa-envelope text-2xl text-blue-500"></i>
-                        </div>
-                        <span class="font-bold text-slate-800">Email Support</span>
-                        <span class="text-xs text-slate-400 mt-1">Average response: 24h</span>
-                    </a>
-                    <div class="flex flex-col items-center p-8 bg-slate-50 rounded-3xl border border-slate-100 hover:bg-purple-50 hover:border-purple-100 transition-all text-center group cursor-pointer">
-                        <div class="w-16 h-16 bg-white rounded-2xl shadow-sm flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                            <i class="fas fa-book text-2xl text-purple-500"></i>
-                        </div>
-                        <span class="font-bold text-slate-800">Documentation</span>
-                        <span class="text-xs text-slate-400 mt-1">Explore User Guides</span>
-                    </div>
-                </div>
+        <!-- Active Sessions Section -->
+        <div
+          class="bg-white rounded-[2rem] p-8 custom-shadow border border-gray-100"
+        >
+          <div class="flex items-center gap-4 mb-8">
+            <div class="p-3 bg-purple-50 text-purple-600 rounded-2xl">
+              <i class="fas fa-desktop"></i>
             </div>
-        </div>
+            <h3 class="text-xl font-black text-slate-900">Active Sessions</h3>
+          </div>
+          <div id="sessions-list" class="space-y-4">
+            <div
+              class="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100"
+            >
+              <div class="flex items-center gap-4">
+                <div class="text-2xl text-slate-400">
+                  <i class="fas fa-laptop"></i>
+                </div>
+                <div>
+                  <p class="font-bold text-slate-800">MacBook Pro 14"</p>
+                  <p class="text-xs text-slate-500">
+                    London, UK • Current Session
+                  </p>
+                </div>
+              </div>
+              <span
+                class="text-[10px] font-black uppercase text-green-500 bg-green-50 px-3 py-1 rounded-full"
+                >Active</span
+              >
+            </div>
 
+            <div
+              class="other-session flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100"
+            >
+              <div class="flex items-center gap-4">
+                <div class="text-2xl text-slate-400">
+                  <i class="fas fa-mobile-alt"></i>
+                </div>
+                <div>
+                  <p class="font-bold text-slate-800">iPhone 15 Pro</p>
+                  <p class="text-xs text-slate-500">London, UK • 2 hours ago</p>
+                </div>
+              </div>
+              <button
+                onclick="removeSingleSession(this)"
+                class="text-[10px] font-black uppercase text-rose-500 hover:bg-rose-50 px-3 py-1 rounded-full transition-colors"
+              >
+                Remove
+              </button>
+            </div>
+
+            <div
+              class="other-session flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100"
+            >
+              <div class="flex items-center gap-4">
+                <div class="text-2xl text-slate-400">
+                  <i class="fas fa-tablet-alt"></i>
+                </div>
+                <div>
+                  <p class="font-bold text-slate-800">iPad Air</p>
+                  <p class="text-xs text-slate-500">
+                    New York, USA • 1 day ago
+                  </p>
+                </div>
+              </div>
+              <button
+                onclick="removeSingleSession(this)"
+                class="text-[10px] font-black uppercase text-rose-500 hover:bg-rose-50 px-3 py-1 rounded-full transition-colors"
+              >
+                Remove
+              </button>
+            </div>
+          </div>
+
+          <button
+            id="remove-all-btn"
+            onclick="toggleModal(true)"
+            class="w-full mt-6 py-3 text-slate-500 font-bold text-sm hover:text-slate-800 transition-colors"
+          >
+            Remove all other devices
+          </button>
+        </div>
+      </div>
+
+      <!-- HELP & SUPPORT VIEW -->
+      <div id="view-help" class="hidden-view view-transition max-w-2xl mx-auto">
+        <div
+          class="bg-white rounded-[2.5rem] p-10 custom-shadow border border-gray-100 text-center"
+        >
+          <div
+            class="w-20 h-20 bg-blue-50 text-blue-600 rounded-3xl flex items-center justify-center text-3xl mx-auto mb-8 shadow-inner"
+          >
+            <i class="fas fa-headset"></i>
+          </div>
+          <h3 class="text-2xl font-black text-slate-900 mb-4">
+            Support Center
+          </h3>
+          <p class="text-slate-500 mb-10 font-medium leading-relaxed">
+            Have questions or need assistance with your ALIGN profile?
+            <br class="hidden md:block" />
+            Our dedicated team is ready to assist you.
+          </p>
+
+          <a
+            href="mailto:support@align.ai"
+            class="flex flex-col items-center p-10 bg-slate-50 rounded-[2rem] border border-slate-100 hover:bg-blue-600 hover:text-white hover:shadow-xl hover:shadow-blue-200 transition-all group"
+          >
+            <div
+              class="w-16 h-16 bg-white rounded-2xl shadow-sm flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-blue-500 transition-all"
+            >
+              <i
+                class="fas fa-envelope text-2xl text-blue-500 group-hover:text-white"
+              ></i>
+            </div>
+            <span
+              class="font-black text-lg group-hover:text-white transition-colors"
+              >Email Support</span
+            >
+            <span
+              class="text-sm text-slate-400 mt-2 font-bold group-hover:text-blue-100 transition-colors uppercase tracking-wider"
+              >Average response: 24h</span
+            >
+          </a>
+
+          <p
+            class="mt-8 text-xs text-slate-400 font-bold uppercase tracking-widest"
+          >
+            Available Mon-Fri • 9am - 6pm GMT
+          </p>
+        </div>
+      </div>
     </main>
 
-    <!-- Centered Copyright -->
     <footer class="py-12 text-center">
-        <p class="text-xs text-slate-400 font-bold uppercase tracking-[0.2em]">© 2026 ALIGN.AI</p>
+      <p class="text-xs text-slate-400 font-bold uppercase tracking-[0.2em]">
+        © 2026 ALIGN.AI
+      </p>
     </footer>
 
     <script>
-        let isEditMode = false;
-        let currentView = 'main';
+      let isEditMode = false;
+      let currentView = "main";
 
-        function switchView(viewName) {
-            const views = {
-                'main': { el: document.getElementById('view-main'), title: 'Account Settings' },
-                'security': { el: document.getElementById('view-security'), title: 'Security & Privacy' },
-                'help': { el: document.getElementById('view-help'), title: 'Help & Support' }
+      function switchView(viewName) {
+        const views = {
+          main: {
+            el: document.getElementById("view-main"),
+            title: "Account Settings",
+          },
+          security: {
+            el: document.getElementById("view-security"),
+            title: "Security & Privacy",
+          },
+          help: {
+            el: document.getElementById("view-help"),
+            title: "Help & Support",
+          },
+        };
+
+        Object.values(views).forEach((v) => {
+          v.el.classList.add("hidden-view");
+          v.el.style.display = "none";
+        });
+
+        const target = views[viewName];
+        target.el.style.display = viewName === "main" ? "grid" : "block";
+        setTimeout(() => {
+          target.el.classList.remove("hidden-view");
+        }, 50);
+
+        document.getElementById("view-title").innerText = target.title;
+        currentView = viewName;
+      }
+
+      function handleHeaderBack() {
+        if (currentView === "main") {
+          window.location.href = "dashboard.html";
+        } else {
+          switchView("main");
+        }
+      }
+
+      function toggleEditMode() {
+        isEditMode = !isEditMode;
+        const inputs = document.querySelectorAll("#profile-form input");
+        const editBtn = document.getElementById("edit-btn");
+
+        if (isEditMode) {
+          inputs.forEach((input) => {
+            input.disabled = false;
+            input.parentElement.classList.add(
+              "bg-white",
+              "ring-2",
+              "ring-blue-100",
+              "border-blue-300",
+            );
+            input.parentElement.classList.remove("bg-slate-50");
+          });
+          editBtn.innerHTML = '<i class="fas fa-times mr-2"></i>Cancel Edit';
+          editBtn.classList.replace("bg-blue-50", "bg-slate-100");
+          editBtn.classList.replace("text-blue-600", "text-slate-600");
+          inputs[0].focus();
+        } else {
+          inputs.forEach((input) => {
+            input.disabled = true;
+            input.parentElement.classList.remove(
+              "bg-white",
+              "ring-2",
+              "ring-blue-100",
+              "border-blue-300",
+            );
+            input.parentElement.classList.add("bg-slate-50");
+          });
+          editBtn.innerHTML = '<i class="fas fa-edit mr-2"></i>Edit Profile';
+          editBtn.classList.replace("bg-slate-100", "bg-blue-50");
+          editBtn.classList.replace("text-slate-600", "text-blue-600");
+        }
+      }
+
+      function showToast(message, isSuccess = true) {
+        const toast = document.getElementById("toast");
+        const toastMsg = document.getElementById("toast-message");
+        const toastIcon = document.getElementById("toast-icon");
+
+        toastMsg.innerText = message;
+        toastIcon.className = isSuccess
+          ? "fas fa-check-circle text-green-400"
+          : "fas fa-exclamation-circle text-rose-400";
+
+        toast.classList.add("toast-active");
+        setTimeout(() => {
+          toast.classList.remove("toast-active");
+        }, 3000);
+      }
+
+      async function saveChanges() {
+        const saveBtn = document.getElementById("save-btn");
+        const originalText = saveBtn.innerHTML;
+
+        saveBtn.disabled = true;
+        saveBtn.innerHTML =
+          '<i class="fas fa-circle-notch animate-spin mr-2"></i>Saving...';
+
+        await new Promise((resolve) => setTimeout(resolve, 1200));
+
+        const newName = document.getElementById("input-name").value;
+        document.getElementById("display-name-heading").innerText =
+          (newName.split(" ")[0] || "User") + " 👋";
+
+        if (isEditMode) toggleEditMode();
+
+        saveBtn.innerHTML = '<i class="fas fa-check mr-2"></i>Saved!';
+        saveBtn.classList.replace("bg-slate-900", "bg-green-600");
+
+        showToast("Changes saved successfully!");
+        document.getElementById("sync-text").innerText =
+          "Last synced: Just now";
+
+        setTimeout(() => {
+          saveBtn.disabled = false;
+          saveBtn.innerHTML = originalText;
+          saveBtn.classList.replace("bg-green-600", "bg-slate-900");
+        }, 3000);
+      }
+
+      function toggleModal(show) {
+        const modal = document.getElementById("modal-overlay");
+        if (show) {
+          modal.classList.remove("hidden");
+        } else {
+          modal.classList.add("hidden");
+        }
+      }
+
+      function removeSingleSession(btn) {
+        const sessionRow = btn.closest(".other-session");
+        sessionRow.style.opacity = "0.5";
+        sessionRow.style.pointerEvents = "none";
+
+        setTimeout(() => {
+          sessionRow.remove();
+          showToast("Device removed successfully");
+
+          const others = document.querySelectorAll(".other-session");
+          if (others.length === 0) {
+            document.getElementById("remove-all-btn").classList.add("hidden");
+          }
+        }, 600);
+      }
+
+      async function executeGlobalSignout() {
+        const confirmBtn = document.getElementById("confirm-remove-btn");
+        const originalText = confirmBtn.innerText;
+
+        confirmBtn.disabled = true;
+        confirmBtn.innerHTML =
+          '<i class="fas fa-circle-notch animate-spin mr-2"></i>Processing...';
+
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+
+        const otherSessions = document.querySelectorAll(".other-session");
+        otherSessions.forEach((session) => session.remove());
+        document.getElementById("remove-all-btn").classList.add("hidden");
+
+        toggleModal(false);
+        showToast("All other devices removed");
+
+        confirmBtn.disabled = false;
+        confirmBtn.innerText = originalText;
+      }
+
+      async function handleSecurityUpdate() {
+        showToast("Security settings updated.");
+        switchView("main");
+      }
+
+      document
+        .getElementById("photo-upload")
+        .addEventListener("change", function (event) {
+          const file = event.target.files[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+              const preview = document.getElementById("profile-preview");
+              const initial = document.getElementById("avatar-initial");
+              preview.src = e.target.result;
+              preview.classList.remove("hidden");
+              initial.classList.add("hidden");
             };
-
-            // Hide all views
-            Object.values(views).forEach(v => {
-                v.el.classList.add('hidden-view');
-                v.el.style.display = 'none';
-            });
-
-            // Show target view
-            const target = views[viewName];
-            target.el.style.display = viewName === 'main' ? 'grid' : 'block';
-            setTimeout(() => {
-                target.el.classList.remove('hidden-view');
-            }, 50);
-
-            // Update Header
-            document.getElementById('view-title').innerText = target.title;
-            currentView = viewName;
-        }
-
-        function handleHeaderBack() {
-            if (currentView === 'main') {
-                window.location.href = "dashboard.html";
-            } else {
-                switchView('main');
-            }
-        }
-
-        function toggleEditMode() {
-            isEditMode = !isEditMode;
-            const inputs = document.querySelectorAll('#profile-form input');
-            const editBtn = document.getElementById('edit-btn');
-            
-            if (isEditMode) {
-                inputs.forEach(input => {
-                    input.disabled = false;
-                    input.parentElement.classList.add('bg-white', 'ring-2', 'ring-blue-100', 'border-blue-300');
-                    input.parentElement.classList.remove('bg-slate-50');
-                });
-                editBtn.innerHTML = '<i class="fas fa-times mr-2"></i>Cancel Edit';
-                editBtn.classList.replace('bg-blue-50', 'bg-slate-100');
-                editBtn.classList.replace('text-blue-600', 'text-slate-600');
-                inputs[0].focus();
-            } else {
-                inputs.forEach(input => {
-                    input.disabled = true;
-                    input.parentElement.classList.remove('bg-white', 'ring-2', 'ring-blue-100', 'border-blue-300');
-                    input.parentElement.classList.add('bg-slate-50');
-                });
-                editBtn.innerHTML = '<i class="fas fa-edit mr-2"></i>Edit Profile';
-                editBtn.classList.replace('bg-slate-100', 'bg-blue-50');
-                editBtn.classList.replace('text-slate-600', 'text-blue-600');
-            }
-        }
-
-        async function showToast(message, isSuccess = true) {
-            const toast = document.getElementById('toast');
-            const toastMsg = document.getElementById('toast-message');
-            const toastIcon = document.getElementById('toast-icon');
-
-            toastMsg.innerText = message;
-            toastIcon.className = isSuccess ? 'fas fa-check-circle text-green-400' : 'fas fa-exclamation-circle text-rose-400';
-            
-            toast.classList.add('toast-active');
-            setTimeout(() => {
-                toast.classList.remove('toast-active');
-            }, 3000);
-        }
-
-        async function saveChanges() {
-            const saveBtn = document.getElementById('save-btn');
-            const originalText = saveBtn.innerHTML;
-            
-            saveBtn.disabled = true;
-            saveBtn.innerHTML = '<i class="fas fa-circle-notch animate-spin mr-2"></i>Saving...';
-
-            await new Promise(resolve => setTimeout(resolve, 1200));
-
-            const newName = document.getElementById('input-name').value;
-            document.getElementById('display-name-heading').innerText = newName.split(' ')[0] + ' 👋';
-            
-            if (isEditMode) toggleEditMode();
-
-            saveBtn.innerHTML = '<i class="fas fa-check mr-2"></i>Saved!';
-            saveBtn.classList.replace('bg-slate-900', 'bg-green-600');
-            
-            showToast("Changes saved successfully!");
-            document.getElementById('sync-text').innerText = 'Last synced: Just now';
-
-            setTimeout(() => {
-                saveBtn.disabled = false;
-                saveBtn.innerHTML = originalText;
-                saveBtn.classList.replace('bg-green-600', 'bg-slate-900');
-            }, 3000);
-        }
-
-        async function handleSecurityUpdate() {
-            showToast("Security settings updated.");
-            switchView('main');
-        }
-
-        document.getElementById('photo-upload').addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const preview = document.getElementById('profile-preview');
-                    const initial = document.getElementById('avatar-initial');
-                    preview.src = e.target.result;
-                    preview.classList.remove('hidden');
-                    initial.classList.add('hidden');
-                };
-                reader.readAsDataURL(file);
-            }
+            reader.readAsDataURL(file);
+          }
         });
     </script>
-
-</body>
+  </body>
 </html>
