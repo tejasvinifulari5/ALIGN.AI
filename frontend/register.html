@@ -1,274 +1,337 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Create Account | ALIGN.AI</title>
 
     <!-- External Assets -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
 
     <style>
-        :root {
-            --primary-blue: #2563eb;
-            --primary-hover: #1d4ed8;
-            --bg-soft: #f8fafc;
-            --border-color: #e2e8f0;
-        }
+      :root {
+        --primary-blue: #2563eb;
+        --primary-hover: #1d4ed8;
+        --bg-soft: #f8fafc;
+        --border-color: #e2e8f0;
+      }
 
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            -webkit-font-smoothing: antialiased;
-            background-color: #fff;
-        }
+      body {
+        font-family:
+          "Inter",
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        -webkit-font-smoothing: antialiased;
+        background-color: #fff;
+      }
 
-        /* Container & Card Layout */
-        .auth-wrapper {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1.5rem;
-        }
+      /* Container & Card Layout */
+      .auth-wrapper {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1.5rem;
+      }
 
-        .auth-card {
-            width: 100%;
-            max-width: 400px;
-            background: #fff;
-            padding: 2.5rem;
-            border-radius: 24px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
-        }
+      .auth-card {
+        width: 100%;
+        max-width: 400px;
+        background: #fff;
+        padding: 2.5rem;
+        border-radius: 24px;
+        border: 1px solid var(--border-color);
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+      }
 
-        /* Branding */
-        .brand-logo-box {
-            width: 64px;
-            height: 64px;
-            margin: 0 auto 1.5rem;
-            background: #eff6ff;
-            border: 1px solid #dbeafe;
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+      /* Branding */
+      .brand-logo-box {
+        width: 64px;
+        height: 64px;
+        margin: 0 auto 1.5rem;
+        background: #eff6ff;
+        border: 1px solid #dbeafe;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
 
-        .brand-title {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #0f172a;
-            letter-spacing: -0.025em;
-        }
+      .brand-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #0f172a;
+        letter-spacing: -0.025em;
+      }
 
-        /* Form Components */
-        .form-group {
-            margin-bottom: 1rem;
-        }
+      /* Form Components */
+      .form-group {
+        margin-bottom: 1rem;
+      }
 
-        .form-label {
-            display: block;
-            font-size: 0.875rem;
-            font-weight: 600;
-            color: #334155;
-            margin-bottom: 0.4rem;
-            margin-left: 0.25rem;
-        }
+      .form-label {
+        display: block;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #334155;
+        margin-bottom: 0.4rem;
+        margin-left: 0.25rem;
+      }
 
-        .input-field {
-            width: 100%;
-            background-color: var(--bg-soft);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 0.75rem 1rem;
-            font-size: 0.875rem;
-            color: #1e293b;
-            transition: all 0.2s ease-in-out;
-        }
+      .input-field {
+        width: 100%;
+        background-color: var(--bg-soft);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 0.75rem 1rem;
+        font-size: 0.875rem;
+        color: #1e293b;
+        transition: all 0.2s ease-in-out;
+      }
 
-        .input-field:focus {
-            outline: none;
-            border-color: var(--primary-blue);
-            background-color: #fff;
-            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
-        }
+      .input-field:focus {
+        outline: none;
+        border-color: var(--primary-blue);
+        background-color: #fff;
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+      }
 
-        /* Password Specifics */
-        .input-field[type="password"] {
-            letter-spacing: 0.15em;
-        }
-        
-        .input-field::placeholder {
-            letter-spacing: normal;
-            color: #94a3b8;
-        }
+      /* Password Specifics */
+      .input-field[type="password"] {
+        letter-spacing: 0.15em;
+      }
 
-        .password-toggle {
-            position: absolute;
-            right: 1rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #94a3b8;
-            cursor: pointer;
-            padding: 4px;
-        }
+      .input-field::placeholder {
+        letter-spacing: normal;
+        color: #94a3b8;
+      }
 
-        .password-toggle:hover {
-            color: var(--primary-blue);
-        }
+      .password-toggle {
+        position: absolute;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #94a3b8;
+        cursor: pointer;
+        padding: 4px;
+      }
 
-        /* Action Buttons */
-        .btn-primary {
-            width: 100%;
-            background-color: var(--primary-blue);
-            color: #fff;
-            padding: 0.875rem;
-            border-radius: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            font-size: 0.875rem;
-            transition: background 0.2s;
-            margin-top: 1rem;
-        }
+      .password-toggle:hover {
+        color: var(--primary-blue);
+      }
 
-        .btn-primary:hover {
-            background-color: var(--primary-hover);
-        }
+      /* Action Buttons */
+      .btn-primary {
+        width: 100%;
+        background-color: var(--primary-blue);
+        color: #fff;
+        padding: 0.875rem;
+        border-radius: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-size: 0.875rem;
+        transition: background 0.2s;
+        margin-top: 1rem;
+      }
 
-        .btn-secondary {
-            width: 100%;
-            background-color: transparent;
-            color: #64748b;
-            padding: 0.875rem;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 0.875rem;
-            transition: all 0.2s;
-            margin-top: 0.5rem;
-            border: 1px solid var(--border-color);
-            text-align: center;
-            display: block;
-        }
+      .btn-primary:hover {
+        background-color: var(--primary-hover);
+      }
 
-        .btn-secondary:hover {
-            background-color: var(--bg-soft);
-            color: #1e293b;
-        }
+      .btn-secondary {
+        width: 100%;
+        background-color: transparent;
+        color: #64748b;
+        padding: 0.875rem;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 0.875rem;
+        transition: all 0.2s;
+        margin-top: 0.5rem;
+        border: 1px solid var(--border-color);
+        text-align: center;
+        display: block;
+      }
+
+      .btn-secondary:hover {
+        background-color: var(--bg-soft);
+        color: #1e293b;
+      }
     </style>
-</head>
-<body>
-
+  </head>
+  <body>
     <main class="auth-wrapper">
-        <div class="auth-card">
-            
-            <!-- Branding Section -->
-            <header class="text-center mb-8">
-                <div class="brand-logo-box">
-                    <svg viewBox="0 0 24 24" fill="none" class="w-10 h-10 text-blue-600" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="12" cy="5" r="3" fill="currentColor"/>
-                        <path d="M12 9V22M12 9L16 13M12 9L8 13M12 15L16 19M12 15L8 19" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </div>
-                <h1 class="brand-title">ALIGN.<span class="text-blue-600">AI</span></h1>
-                <p class="text-slate-500 mt-1 text-sm">Join us. Create your account.</p>
-            </header>
+      <div class="auth-card">
+        <!-- Branding Section -->
+        <header class="text-center mb-8">
+          <div class="brand-logo-box">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              class="w-10 h-10 text-blue-600"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle cx="12" cy="5" r="3" fill="currentColor" />
+              <path
+                d="M12 9V22M12 9L16 13M12 9L8 13M12 15L16 19M12 15L8 19"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </div>
+          <h1 class="brand-title">
+            ALIGN.<span class="text-blue-600">AI</span>
+          </h1>
+          <p class="text-slate-500 mt-1 text-sm">
+            Join us. Create your account.
+          </p>
+        </header>
 
-            <!-- Registration Form -->
-            <form id="registrationForm">
-                <div class="form-group">
-                    <label for="fullName" class="form-label">Full Name</label>
-                    <input type="text" id="fullName" placeholder="Enter your full name" required class="input-field">
-                </div>
+        <!-- Registration Form -->
+        <form id="registrationForm">
+          <div class="form-group">
+            <label for="fullName" class="form-label">Full Name</label>
+            <input
+              type="text"
+              id="fullName"
+              placeholder="Enter your full name"
+              required
+              class="input-field"
+            />
+          </div>
 
-                <div class="form-group">
-                    <label for="username" class="form-label">Username</label>
-                    <input type="text" id="username" placeholder="Choose a username" required class="input-field">
-                </div>
+          <div class="form-group">
+            <label for="username" class="form-label">Username</label>
+            <input
+              type="text"
+              id="username"
+              placeholder="Choose a username"
+              required
+              class="input-field"
+            />
+          </div>
 
-                <div class="form-group">
-                    <label for="password" class="form-label">Password</label>
-                    <div class="relative">
-                        <input type="password" id="password" placeholder="Create a password" required class="input-field">
-                        <button type="button" class="password-toggle" onclick="toggleVisibility('password', this)">
-                            <i class="far fa-eye"></i>
-                        </button>
-                    </div>
-                </div>
+          <div class="form-group">
+            <label for="password" class="form-label">Password</label>
+            <div class="relative">
+              <input
+                type="password"
+                id="password"
+                placeholder="Create a password"
+                required
+                class="input-field"
+              />
+              <button
+                type="button"
+                class="password-toggle"
+                onclick="toggleVisibility('password', this)"
+              >
+                <i class="far fa-eye"></i>
+              </button>
+            </div>
+          </div>
 
-                <div class="form-group">
-                    <label for="confirmPassword" class="form-label">Confirm Password</label>
-                    <div class="relative">
-                        <input type="password" id="confirmPassword" placeholder="Confirm your password" required class="input-field">
-                        <button type="button" class="password-toggle" onclick="toggleVisibility('confirmPassword', this)">
-                            <i class="far fa-eye"></i>
-                        </button>
-                    </div>
-                </div>
+          <div class="form-group">
+            <label for="confirmPassword" class="form-label"
+              >Confirm Password</label
+            >
+            <div class="relative">
+              <input
+                type="password"
+                id="confirmPassword"
+                placeholder="Confirm your password"
+                required
+                class="input-field"
+              />
+              <button
+                type="button"
+                class="password-toggle"
+                onclick="toggleVisibility('confirmPassword', this)"
+              >
+                <i class="far fa-eye"></i>
+              </button>
+            </div>
+          </div>
 
-                <button type="submit" id="registerBtn" class="btn-primary">Register</button>
-                <a href="index.html" class="btn-secondary">Back to Login</a>
-            </form>
+          <button type="submit" id="registerBtn" class="btn-primary">
+            Register
+          </button>
+          <a href="login.html" class="btn-secondary">Back to Login</a>
+        </form>
 
-            <footer class="mt-8 pt-6 border-t border-slate-100 text-center">
-                <p class="text-xs text-slate-400">
-                    By registering, you agree to our <a href="#" class="underline">Terms of Service</a>.
-                </p>
-            </footer>
-
-        </div>
+        <footer class="mt-8 pt-6 border-t border-slate-100 text-center">
+          <p class="text-xs text-slate-400">
+            By registering, you agree to our
+            <a href="#" class="underline">Terms of Service</a>.
+          </p>
+        </footer>
+      </div>
     </main>
 
     <script>
-        /**
-         * Shared Password Toggle Logic
-         */
-        function toggleVisibility(inputId, btn) {
-            const input = document.getElementById(inputId);
-            const icon = btn.querySelector('i');
-            const isPassword = input.type === 'password';
-            
-            input.type = isPassword ? 'text' : 'password';
-            input.style.letterSpacing = isPassword ? 'normal' : '0.15em';
-            
-            icon.classList.toggle('fa-eye');
-            icon.classList.toggle('fa-eye-slash');
+      /**
+       * Shared Password Toggle Logic
+       */
+      function toggleVisibility(inputId, btn) {
+        const input = document.getElementById(inputId);
+        const icon = btn.querySelector("i");
+        const isPassword = input.type === "password";
+
+        input.type = isPassword ? "text" : "password";
+        input.style.letterSpacing = isPassword ? "normal" : "0.15em";
+
+        icon.classList.toggle("fa-eye");
+        icon.classList.toggle("fa-eye-slash");
+      }
+
+      /**
+       * Form Submission Logic
+       */
+      const regForm = document.getElementById("registrationForm");
+      const registerBtn = document.getElementById("registerBtn");
+
+      regForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const pw = document.getElementById("password").value;
+        const confirm = document.getElementById("confirmPassword").value;
+
+        if (pw !== confirm) {
+          // Simple inline validation feedback
+          document.getElementById("confirmPassword").style.borderColor =
+            "#ef4444";
+          return;
         }
 
-        /**
-         * Form Submission Logic
-         */
-        const regForm = document.getElementById('registrationForm');
-        const registerBtn = document.getElementById('registerBtn');
+        // Visual feedback for simulation
+        registerBtn.disabled = true;
+        registerBtn.innerHTML =
+          '<i class="fas fa-circle-notch fa-spin mr-2"></i> Creating Account...';
 
-        regForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            const pw = document.getElementById('password').value;
-            const confirm = document.getElementById('confirmPassword').value;
-            
-            if (pw !== confirm) {
-                // Simple inline validation feedback
-                document.getElementById('confirmPassword').style.borderColor = '#ef4444';
-                return;
-            }
+        setTimeout(() => {
+          registerBtn.innerHTML = "Success!";
+          registerBtn.style.backgroundColor = "#16a34a";
 
-            // Visual feedback for simulation
-            registerBtn.disabled = true;
-            registerBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin mr-2"></i> Creating Account...';
-
-            setTimeout(() => {
-                registerBtn.innerHTML = 'Success!';
-                registerBtn.style.backgroundColor = '#16a34a';
-                
-                // Redirect back to login after success
-                setTimeout(() => {
-                    window.location.href = 'index.html';
-                }, 1000);
-            }, 1200);
-        });
+          // Redirect back to login after success
+          setTimeout(() => {
+            window.location.href = "login.html";
+          }, 1000);
+        }, 1200);
+      });
     </script>
-</body>
+  </body>
 </html>
