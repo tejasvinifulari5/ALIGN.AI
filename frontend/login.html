@@ -56,17 +56,6 @@
       }
 
       /* Branding */
-      .brand-logo-box {
-        width: 64px;
-        height: 64px;
-        margin: 0 auto 1.5rem;
-        background: #eff6ff;
-        border: 1px solid #dbeafe;
-        border-radius: 16px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
 
       .brand-title {
         font-size: 2rem;
@@ -164,6 +153,14 @@
         opacity: 0.7;
         cursor: not-allowed;
       }
+      .logo-img {
+        width: 60px; /* increased size */
+        height: 80px;
+        object-fit: contain;
+        mix-blend-mode: multiply;
+        display: block;
+        margin: 0 auto; /* centers the image horizontally */
+      }
     </style>
   </head>
   <body>
@@ -172,22 +169,7 @@
         <!-- Branding Section -->
         <header class="text-center mb-8">
           <div class="brand-logo-box">
-            <!-- Restored User Specified Logo -->
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              class="w-10 h-10 text-blue-600"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <circle cx="12" cy="5" r="3" fill="currentColor" />
-              <path
-                d="M12 9V22M12 9L16 13M12 9L8 13M12 15L16 19M12 15L8 19"
-                stroke="currentColor"
-                stroke-width="2.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
+            <img src="assets/logo.png" alt="ALIGN.AI Logo" class="logo-img" />
           </div>
           <h1 class="brand-title">
             ALIGN.<span class="text-blue-600">AI</span>
@@ -227,7 +209,9 @@
                 <i id="toggleIcon" class="far fa-eye"></i>
               </button>
             </div>
-            <p class="hint"><i class="fas fa-info-circle"></i> Min. 8 characters</p>
+            <p class="hint">
+              <i class="fas fa-info-circle"></i> Min. 8 characters
+            </p>
           </div>
 
           <div class="flex items-center justify-between mt-4 mb-6">
@@ -255,11 +239,15 @@
         <footer class="mt-8 pt-6 border-t border-slate-100 text-center">
           <p class="text-sm text-slate-500 mb-4">
             New here?
-            <a href="register.html" class="text-blue-600 font-bold hover:underline"
+            <a
+              href="register.html"
+              class="text-blue-600 font-bold hover:underline"
               >Create an account</a
             >
           </p>
-          <div class="text-slate-400 text-[10px] uppercase tracking-widest font-bold">
+          <div
+            class="text-slate-400 text-[10px] uppercase tracking-widest font-bold"
+          >
             &copy; 2026 ALIGN.AI
           </div>
         </footer>
@@ -286,27 +274,29 @@
 
       // Handle Form Submission
       function loginUser(event) {
-  event.preventDefault();
+        event.preventDefault();
 
-  submitBtn.disabled = true;
-  submitBtn.innerHTML =
-    '<i class="fas fa-circle-notch fa-spin mr-2"></i> Authenticating...';
+        submitBtn.disabled = true;
+        submitBtn.innerHTML =
+          '<i class="fas fa-circle-notch fa-spin mr-2"></i> Authenticating...';
 
-  setTimeout(() => {
-    window.location.href = "dashboard.html";
-  }, 800);
-}
+        setTimeout(() => {
+          window.location.href = "dashboard.html";
+        }, 800);
+      }
     </script>
-    <script>function loginUser(event) {
-  event.preventDefault();
+    <script>
+      function loginUser(event) {
+        event.preventDefault();
 
-  submitBtn.disabled = true;
-  submitBtn.innerHTML =
-    '<i class="fas fa-circle-notch fa-spin mr-2"></i> Authenticating...';
+        submitBtn.disabled = true;
+        submitBtn.innerHTML =
+          '<i class="fas fa-circle-notch fa-spin mr-2"></i> Authenticating...';
 
-  setTimeout(() => {
-    window.location.href = "dashboard.html";
-  }, 800);
-}</script>
+        setTimeout(() => {
+          window.location.href = "dashboard.html";
+        }, 800);
+      }
+    </script>
   </body>
 </html>
