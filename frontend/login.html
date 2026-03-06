@@ -196,7 +196,7 @@
         </header>
 
         <!-- Main Auth Form -->
-        <form id="loginForm" onsubmit="loginUser(event)"></form>
+        <form id="loginForm" onsubmit="loginUser(event)">
           <div class="form-group">
             <label for="username" class="form-label">Username</label>
             <input
@@ -297,14 +297,16 @@
   }, 800);
 }
     </script>
-    <script>
-function loginUser(event){
-    event.preventDefault(); 
+    <script>function loginUser(event) {
+  event.preventDefault();
 
-    // here you can later add login validation
+  submitBtn.disabled = true;
+  submitBtn.innerHTML =
+    '<i class="fas fa-circle-notch fa-spin mr-2"></i> Authenticating...';
 
+  setTimeout(() => {
     window.location.href = "dashboard.html";
-}
-</script>
+  }, 800);
+}</script>
   </body>
 </html>
