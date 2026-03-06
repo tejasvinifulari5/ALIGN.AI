@@ -132,6 +132,15 @@
         color: var(--primary-blue);
       }
 
+      .hint {
+        font-size: 0.75rem;
+        color: #64748b;
+        margin-top: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+      }
+
       /* Action Buttons */
       .btn-primary {
         width: 100%;
@@ -163,6 +172,7 @@
         <!-- Branding Section -->
         <header class="text-center mb-8">
           <div class="brand-logo-box">
+            <!-- Restored User Specified Logo -->
             <svg
               viewBox="0 0 24 24"
               fill="none"
@@ -186,14 +196,13 @@
         </header>
 
         <!-- Main Auth Form -->
-        <form id="loginForm">
+        <form id="loginForm" onsubmit="loginUser(event)"></form>
           <div class="form-group">
             <label for="username" class="form-label">Username</label>
             <input
               type="text"
               id="username"
               name="username"
-              placeholder="Enter your username"
               required
               class="input-field"
             />
@@ -206,7 +215,6 @@
                 type="password"
                 id="passwordField"
                 name="password"
-                placeholder="Enter your password"
                 required
                 class="input-field"
               />
@@ -219,6 +227,7 @@
                 <i id="toggleIcon" class="far fa-eye"></i>
               </button>
             </div>
+            <p class="hint"><i class="fas fa-info-circle"></i> Min. 8 characters</p>
           </div>
 
           <div class="flex items-center justify-between mt-4 mb-6">
@@ -244,21 +253,20 @@
         </form>
 
         <footer class="mt-8 pt-6 border-t border-slate-100 text-center">
-          <p class="text-sm text-slate-500">
+          <p class="text-sm text-slate-500 mb-4">
             New here?
             <a href="register.html" class="text-blue-600 font-bold hover:underline"
               >Create an account</a
             >
           </p>
+          <div class="text-slate-400 text-[10px] uppercase tracking-widest font-bold">
+            &copy; 2026 ALIGN.AI
+          </div>
         </footer>
       </div>
     </main>
 
     <script>
-      /**
-       * Pure JS Auth Logic
-       * No frameworks, just reliable event listeners.
-       */
       const loginForm = document.getElementById("loginForm");
       const passwordInput = document.getElementById("passwordField");
       const toggleBtn = document.getElementById("toggleBtn");
@@ -277,21 +285,26 @@
       });
 
       // Handle Form Submission
-      loginForm.addEventListener("submit", (e) => {
-        e.preventDefault();
+      function loginUser(event) {
+  event.preventDefault();
 
-        // Visual feedback for the user
-        submitBtn.disabled = true;
-        submitBtn.innerHTML =
-          '<i class="fas fa-circle-notch fa-spin mr-2"></i> Authenticating...';
+  submitBtn.disabled = true;
+  submitBtn.innerHTML =
+    '<i class="fas fa-circle-notch fa-spin mr-2"></i> Authenticating...';
 
-        // Simulate server response
-        setTimeout(() => {
-          submitBtn.innerHTML = "Welcome Back";
-          submitBtn.style.backgroundColor = "#16a34a"; // Success green
-          console.log("Login attempt captured locally.");
-        }, 800);
-      });
+  setTimeout(() => {
+    window.location.href = "dashboard.html";
+  }, 800);
+}
     </script>
+    <script>
+function loginUser(event){
+    event.preventDefault(); 
+
+    // here you can later add login validation
+
+    window.location.href = "dashboard.html";
+}
+</script>
   </body>
 </html>
