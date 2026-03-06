@@ -34,18 +34,18 @@
       }
 
       .app-shell {
-        max-width: 500px;
-        margin: 2rem auto;
-        padding: 0 1rem;
-      }
-
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
       .card-main {
-        background: #ffffff;
-        border-radius: 24px;
-        border: 1px solid var(--border-default);
-        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
-        overflow: hidden;
-      }
+  background: #ffffff;
+  width: 100%;
+  min-height: 100vh;
+  border-radius: 0;
+  overflow: hidden;
+}
 
       /* Profile Header */
       .hero-banner {
@@ -162,7 +162,7 @@
       }
     </style>
   </head>
-  <body>
+  <body class="bg-slate-100">
     <div class="app-shell">
       <main class="card-main">
         
@@ -213,6 +213,12 @@
             </span>
             <i class="fas fa-chevron-right text-xs text-slate-400"></i>
           </button>
+          <button class="nav-item" onclick="window.location.href='profile.html'">
+  <span class="flex items-center gap-3">
+    <i class="fas fa-user text-blue-600"></i> Profile Settings
+  </span>
+  <i class="fas fa-chevron-right text-xs text-slate-400"></i>
+</button>
         </nav>
 
         <!-- Logged Activity -->
