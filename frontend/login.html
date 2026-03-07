@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login | ALIGN.AI</title>
+
+    <!-- External Assets -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --primary-blue: #2563eb;
+        --primary-hover: #1d4ed8;
+        --bg-soft: #f8fafc;
+        --border-color: #e2e8f0;
+      }
+
+      body {
+        font-family:
+          "Inter",
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        -webkit-font-smoothing: antialiased;
+        background-color: #fff;
+      }
+
+      /* Container & Card Layout */
+      .auth-wrapper {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1.5rem;
+      }
+
+      .auth-card {
+        width: 100%;
+        max-width: 400px;
+        background: #fff;
+        padding: 2.5rem;
+        border-radius: 24px;
+        border: 1px solid var(--border-color);
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+      }
+
+      /* Branding */
+
+      .brand-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #0f172a;
+        letter-spacing: -0.025em;
+      }
+
+      /* Form Components */
+      .form-group {
+        margin-bottom: 1.25rem;
+      }
+
+      .form-label {
+        display: block;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #334155;
+        margin-bottom: 0.5rem;
+        margin-left: 0.25rem;
+      }
+
+      .input-field {
+        width: 100%;
+        background-color: var(--bg-soft);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 0.75rem 1rem;
+        font-size: 0.875rem;
+        color: #1e293b;
+        transition: all 0.2s ease-in-out;
+      }
+
+      .input-field:focus {
+        outline: none;
+        border-color: var(--primary-blue);
+        background-color: #fff;
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+      }
+
+      /* Password Specifics */
+      .input-field[type="password"] {
+        letter-spacing: 0.15em;
+      }
+
+      /* Ensures placeholder doesn't inherit the password dots spacing */
+      .input-field::placeholder {
+        letter-spacing: normal;
+        color: #94a3b8;
+      }
+
+      .password-toggle {
+        position: absolute;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #94a3b8;
+        cursor: pointer;
+        padding: 4px;
+      }
+
+      .password-toggle:hover {
+        color: var(--primary-blue);
+      }
+
+      .hint {
+        font-size: 0.75rem;
+        color: #64748b;
+        margin-top: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+      }
+
+      /* Action Buttons */
+      .btn-primary {
+        width: 100%;
+        background-color: var(--primary-blue);
+        color: #fff;
+        padding: 0.875rem;
+        border-radius: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-size: 0.875rem;
+        transition: background 0.2s;
+        margin-top: 1rem;
+      }
+
+      .btn-primary:hover {
+        background-color: var(--primary-hover);
+      }
+
+      .btn-primary:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+      }
+      .logo-img {
+        width: 60px; /* increased size */
+        height: 80px;
+        object-fit: contain;
+        mix-blend-mode: multiply;
+        display: block;
+        margin: 0 auto; /* centers the image horizontally */
+      }
+    </style>
+  </head>
+  <body>
+    <main class="auth-wrapper">
+      <div class="auth-card">
+        <!-- Branding Section -->
+        <header class="text-center mb-8">
+          <div class="brand-logo-box">
+            <img src="assets/logo.png" alt="ALIGN.AI Logo" class="logo-img" />
+          </div>
+          <h1 class="brand-title">
+            ALIGN.<span class="text-blue-600">AI</span>
+          </h1>
+          <p class="text-slate-500 mt-1 text-sm">Welcome back. Please login.</p>
+        </header>
+
+        <!-- Main Auth Form -->
+        <form id="loginForm" onsubmit="loginUser(event)">
+          <div class="form-group">
+            <label for="username" class="form-label">Username</label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              required
+              class="input-field"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="passwordField" class="form-label">Password</label>
+            <div class="relative">
+              <input
+                type="password"
+                id="passwordField"
+                name="password"
+                required
+                class="input-field"
+              />
+              <button
+                type="button"
+                id="toggleBtn"
+                class="password-toggle"
+                aria-label="Toggle password visibility"
+              >
+                <i id="toggleIcon" class="far fa-eye"></i>
+              </button>
+            </div>
+            <p class="hint">
+              <i class="fas fa-info-circle"></i> Min. 8 characters
+            </p>
+          </div>
+
+          <div class="flex items-center justify-between mt-4 mb-6">
+            <label
+              class="flex items-center text-xs text-slate-500 cursor-pointer"
+            >
+              <input
+                type="checkbox"
+                class="mr-2 rounded border-slate-300 accent-blue-600"
+              />
+              Remember me
+            </label>
+            <a
+              href="#"
+              class="text-xs font-semibold text-blue-600 hover:underline"
+              >Forgot password?</a
+            >
+          </div>
+
+          <button type="submit" id="submitBtn" class="btn-primary">
+            Login
+          </button>
+        </form>
+
+        <footer class="mt-8 pt-6 border-t border-slate-100 text-center">
+          <p class="text-sm text-slate-500 mb-4">
+            New here?
+            <a
+              href="register.html"
+              class="text-blue-600 font-bold hover:underline"
+              >Create an account</a
+            >
+          </p>
+          <div
+            class="text-slate-400 text-[10px] uppercase tracking-widest font-bold"
+          >
+            &copy; 2026 ALIGN.AI
+          </div>
+        </footer>
+      </div>
+    </main>
+
+    <script>
+      const loginForm = document.getElementById("loginForm");
+      const passwordInput = document.getElementById("passwordField");
+      const toggleBtn = document.getElementById("toggleBtn");
+      const toggleIcon = document.getElementById("toggleIcon");
+      const submitBtn = document.getElementById("submitBtn");
+
+      // Handle Password Visibility
+      toggleBtn.addEventListener("click", () => {
+        const isPassword = passwordInput.type === "password";
+
+        passwordInput.type = isPassword ? "text" : "password";
+        passwordInput.style.letterSpacing = isPassword ? "normal" : "0.15em";
+
+        toggleIcon.classList.toggle("fa-eye");
+        toggleIcon.classList.toggle("fa-eye-slash");
+      });
+
+      // Handle Form Submission
+      function loginUser(event) {
+        event.preventDefault();
+
+        submitBtn.disabled = true;
+        submitBtn.innerHTML =
+          '<i class="fas fa-circle-notch fa-spin mr-2"></i> Authenticating...';
+
+        setTimeout(() => {
+          window.location.href = "dashboard.html";
+        }, 800);
+      }
+    </script>
+    <script>
+      function loginUser(event) {
+        event.preventDefault();
+
+        submitBtn.disabled = true;
+        submitBtn.innerHTML =
+          '<i class="fas fa-circle-notch fa-spin mr-2"></i> Authenticating...';
+
+        setTimeout(() => {
+          window.location.href = "dashboard.html";
+        }, 800);
+      }
+    </script>
+  </body>
+</html>
