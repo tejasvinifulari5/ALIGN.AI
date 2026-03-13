@@ -254,49 +254,7 @@
       </div>
     </main>
 
-    <script>
-      const loginForm = document.getElementById("loginForm");
-      const passwordInput = document.getElementById("passwordField");
-      const toggleBtn = document.getElementById("toggleBtn");
-      const toggleIcon = document.getElementById("toggleIcon");
-      const submitBtn = document.getElementById("submitBtn");
-
-      // Handle Password Visibility
-      toggleBtn.addEventListener("click", () => {
-        const isPassword = passwordInput.type === "password";
-
-        passwordInput.type = isPassword ? "text" : "password";
-        passwordInput.style.letterSpacing = isPassword ? "normal" : "0.15em";
-
-        toggleIcon.classList.toggle("fa-eye");
-        toggleIcon.classList.toggle("fa-eye-slash");
-      });
-
-      // Handle Form Submission
-      function loginUser(event) {
-        event.preventDefault();
-
-        submitBtn.disabled = true;
-        submitBtn.innerHTML =
-          '<i class="fas fa-circle-notch fa-spin mr-2"></i> Authenticating...';
-
-        setTimeout(() => {
-          window.location.href = "dashboard.html";
-        }, 800);
-      }
-    </script>
-    <script>
-      function loginUser(event) {
-        event.preventDefault();
-
-        submitBtn.disabled = true;
-        submitBtn.innerHTML =
-          '<i class="fas fa-circle-notch fa-spin mr-2"></i> Authenticating...';
-
-        setTimeout(() => {
-          window.location.href = "dashboard.html";
-        }, 800);
-      }
-    </script>
+    
+  <script src="js/login.js"></script> 
   </body>
 </html>
