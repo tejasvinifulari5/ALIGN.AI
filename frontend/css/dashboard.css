@@ -141,3 +141,10 @@
         padding: 1rem 1.5rem 2rem;
         text-align: center;
       }
+
+      .nav-item{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
