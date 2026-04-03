@@ -14,39 +14,43 @@ toggleBtn.addEventListener("click", () => {
 });
 
 // ✅ Login Form Submission
-function loginUser(event) {
+async function loginUser(event) {
   event.preventDefault();
 
   const username = document.getElementById("username").value.trim().toLowerCase();
   const password = document.getElementById("passwordField").value;
 
-  // Get registered users from localStorage
-  const users = JSON.parse(localStorage.getItem("alignai_users") || "{}");
-
-  // Validate credentials
-  if (!users[username]) {
-    showError("Username not found. Please register first.");
-    return;
-  }
-
-  if (users[username].password !== password) {
-    showError("Incorrect password. Please try again.");
-    return;
-  }
-
-  // ✅ Login success — save session
-  localStorage.setItem("alignai_current_user", JSON.stringify({
-    username: username,
-    name: users[username].name,
-    email: users[username].email
-  }));
-
   submitBtn.disabled = true;
   submitBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin mr-2"></i> Logging in...';
 
-  setTimeout(() => {
-    window.location.href = "dashboard.html";
-  }, 800);
+  try {
+    const res = await fetch("http://127.0.0.1:5500/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password })
+    });
+    
+    const data = await res.json();
+
+    if (!data.success) {
+      showError(data.message || "Invalid credentials");
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<i class="fas fa-sign-in-alt mr-2"></i> Login';
+      return;
+    }
+
+    // ✅ Login success — save session
+    localStorage.setItem("alignai_current_user", JSON.stringify(data.user));
+
+    setTimeout(() => {
+      window.location.href = "dashboard.html";
+    }, 500);
+
+  } catch (error) {
+    showError("Could not connect to server.");
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = '<i class="fas fa-sign-in-alt mr-2"></i> Login';
+  }
 }
 
 function showError(msg) {

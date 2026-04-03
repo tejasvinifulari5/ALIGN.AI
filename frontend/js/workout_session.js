@@ -1,5 +1,8 @@
-if (!localStorage.getItem("alignai_current_user")) window.location.href = "login.html";
-
+let currentUser = JSON.parse(localStorage.getItem("alignai_current_user") || "null");
+if (!currentUser || !currentUser.id) {
+    localStorage.removeItem("alignai_current_user");
+    window.location.href = "login.html";
+}
 const params = new URLSearchParams(window.location.search);
 const exercise = params.get("exercise") || "squats";
 const exerciseName = exercise.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
@@ -89,10 +92,7 @@ function saveSummary(data) {
         dateShort:    new Date().toLocaleDateString("en-IN", {day:"numeric", month:"short"})
     };
 
-    const historyKey = `alignai_history_${currentUser.username}`;
-    const history = JSON.parse(localStorage.getItem(historyKey) || "[]");
-    history.push({ ...summary, date: summary.dateShort });
-    localStorage.setItem(historyKey, JSON.stringify(history));
+    // Save only for the immediate summary screen, history is in MySQL now!
     localStorage.setItem("alignai_last_summary", JSON.stringify(summary));
 }
 
@@ -103,8 +103,14 @@ async function stopSession() {
     // Stop camera
     if (stream) stream.getTracks().forEach(t => t.stop());
 
+    const currentUser = JSON.parse(localStorage.getItem("alignai_current_user"));
+
     try {
-        const res = await fetch("http://127.0.0.1:5500/stop");
+        const res = await fetch("http://127.0.0.1:5500/stop", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ user_id: currentUser ? currentUser.id : null })
+        });
         const data = await res.json();
         saveSummary(data);
         window.location.href = "workout_summary.html";

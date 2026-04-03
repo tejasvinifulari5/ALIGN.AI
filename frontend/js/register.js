@@ -19,7 +19,7 @@
 
   const state = { isHandleTouched: false };
 
-  // ✅ Check username availability (localStorage + hardcoded)
+  // ✅ Check username availability
   const checkHandle = (val) => {
     if (!val || val.length < 2) {
       elements.status.innerHTML = "";
@@ -27,12 +27,7 @@
       return;
     }
 
-    const users = JSON.parse(localStorage.getItem("alignai_users") || "{}");
-    const allTaken = [
-      ...CONFIG.existingUsers,
-      ...Object.keys(users)
-    ];
-
+    const allTaken = [...CONFIG.existingUsers];
     const isTaken = allTaken.includes(val.toLowerCase().trim());
 
     if (isTaken) {
@@ -94,16 +89,14 @@
     });
   });
 
-  // ✅ Form Submit — save user to localStorage
-  elements.form.addEventListener("submit", (e) => {
+  // ✅ Form Submit
+  elements.form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     const username = elements.handle.value.toLowerCase().trim();
-    const users = JSON.parse(localStorage.getItem("alignai_users") || "{}");
-    const allTaken = [...CONFIG.existingUsers, ...Object.keys(users)];
 
     // Validations
-    if (allTaken.includes(username)) return elements.handle.focus();
+    if (CONFIG.existingUsers.includes(username)) return elements.handle.focus();
 
     if (elements.pass.value.length < CONFIG.minPassLength) return elements.pass.focus();
 
@@ -112,31 +105,39 @@
       return elements.confirm.focus();
     }
 
-    // ✅ Save new user
-    users[username] = {
-      name:     elements.name.value.trim(),
-      email:    elements.email.value.trim(),
-      password: elements.pass.value,
-      joinedAt: new Date().toLocaleDateString()
-    };
-    localStorage.setItem("alignai_users", JSON.stringify(users));
-
-    // ✅ Auto login after register
-    localStorage.setItem("alignai_current_user", JSON.stringify({
-      username: username,
-      name:     elements.name.value.trim(),
-      email:    elements.email.value.trim()
-    }));
-
     elements.submit.disabled = true;
     elements.submit.innerHTML = '<i class="fas fa-circle-notch fa-spin mr-2"></i> Creating account...';
 
-    setTimeout(() => {
+    try {
+      const res = await fetch("http://127.0.0.1:5500/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          full_name: elements.name.value.trim(),
+          email: elements.email.value.trim(),
+          username: username,
+          password: elements.pass.value
+        })
+      });
+
+      const data = await res.json();
+
+      if (!data.success) {
+        elements.status.innerHTML = `<span class="status-msg text-red-500"><i class="fas fa-times-circle"></i> Error: ${data.error || 'Server error'}</span>`;
+        elements.submit.disabled = false;
+        elements.submit.innerHTML = 'Sign Up <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>';
+        return;
+      }
+
       elements.submit.innerHTML = '<i class="fas fa-check mr-2"></i> Account Created!';
       elements.submit.style.backgroundColor = "#16a34a";
       setTimeout(() => {
-        window.location.href = "dashboard.html";
+        window.location.href = "login.html"; // Go to login after registering since backend doesn't return user obj
       }, 1000);
-    }, 1500);
+
+    } catch (err) {
+      elements.submit.disabled = false;
+      elements.submit.innerHTML = 'Sign Up <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>';
+    }
   });
 })();

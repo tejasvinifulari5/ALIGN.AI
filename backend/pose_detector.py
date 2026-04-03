@@ -46,7 +46,7 @@ def get_landmarker():
         _landmarker = PoseLandmarker.create_from_options(options)
     return _landmarker
 
-def get_landmarks(frame):
+def get_landmarks(frame, required_idxs=(23, 25, 27)):
     """
     Input: BGR frame from webcam
     Output: 33 landmarks or None
@@ -71,8 +71,7 @@ def get_landmarks(frame):
 
             # ✅ Filter by visibility — skip hidden landmarks
             MIN_VISIBILITY = 0.5
-            if all(lm.visibility > MIN_VISIBILITY
-                   for lm in [landmarks[23], landmarks[25], landmarks[27]]):
+            if all(landmarks[idx].visibility > MIN_VISIBILITY for idx in required_idxs):
                 return landmarks
 
         return None
