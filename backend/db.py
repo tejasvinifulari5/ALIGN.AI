@@ -5,7 +5,7 @@ def get_connection():
         host     = "localhost",
         port     = 3306,
         user     = "root",
-        password = "Password@1234",      # your MySQL password
+        password = "Tejasvini@06",      # your MySQL password
         database = "alignai_db"
     )
     return connection
