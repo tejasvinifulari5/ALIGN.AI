@@ -37,7 +37,7 @@ def get_stability_score(current, previous):
         rule_score = 20
 
     # ✅ Combine both (IMPORTANT for AIDS domain)
-    final_score = (0.6 * rule_score) + (0.4 * dataset_score)
+    final_score = (0.75 * rule_score) + (0.25 * dataset_score)
 
     return round(final_score, 2)                            # very unstable
 

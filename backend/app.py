@@ -187,7 +187,7 @@ def start():
 @app.route("/analyze", methods=["POST"])
 def analyze():
     global prev_angle, posture_scores, stability_scores
-    global live_stats, IDX_A, IDX_B, IDX_C
+    global live_stats, IDX_A, IDX_B, IDX_C, current_exercise
 
     if not session_active:
         return jsonify(live_stats)
@@ -208,12 +208,25 @@ def analyze():
         if landmarks:
             a, b, c = landmarks[IDX_A], landmarks[IDX_B], landmarks[IDX_C]
 
-            angle         = calculate_angle(a, b, c)
-            posture_label = get_posture_label(angle)
-            posture_score = get_posture_score(angle)
-            feedback      = get_posture_feedback(angle)
-            stability     = get_stability_score(angle, prev_angle)
-            reps, rep_fb  = rep_counter.update(angle)
+            angle = calculate_angle(a, b, c)
+
+            # ✅ Normalize exercise name
+            if "bicep" in current_exercise:
+                exercise_type = "bicep"
+            elif "squat" in current_exercise:
+                exercise_type = "squat"
+            elif "pushup" in current_exercise:
+                exercise_type = "pushup"
+            else:
+                exercise_type = "squat"
+
+            # ✅ FIXED CALLS
+            posture_label = get_posture_label(angle, exercise_type)
+            posture_score = get_posture_score(angle, exercise_type)
+            feedback      = get_posture_feedback(angle, exercise_type)
+
+            stability = get_stability_score(angle, prev_angle)
+            reps, rep_fb = rep_counter.update(angle)
 
             posture_scores.append(posture_score)
             stability_scores.append(stability)
@@ -226,7 +239,7 @@ def analyze():
                 "stability": round(stability, 1),
                 "reps": reps,
                 "stage": rep_counter.stage,
-                "feedback": rep_fb or feedback,
+                "feedback": rep_fb if rep_fb else feedback,
             })
 
     except Exception as e:
