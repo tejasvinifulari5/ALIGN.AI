@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ALIGN.AI — Exercise Instructions</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/exercises.css"/>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <button class="back-btn" onclick="window.location.href='dashboard.html'">
+      <i class="fas fa-arrow-left"></i>
+    </button>
+    <h1>Exercise Guide</h1>
+  </header>
+
+  <!-- Tab Bar -->
+  <div class="tab-bar">
+    <button class="tab active" onclick="showTab('squats', this)">
+      <i class="fas fa-child"></i> Squats
+    </button>
+    <button class="tab" onclick="showTab('bicep', this)">
+      <i class="fas fa-dumbbell"></i> Bicep Curls
+    </button>
+    <button class="tab" onclick="showTab('pushups', this)">
+      <i class="fas fa-align-center"></i> Pushups
+    </button>
+  </div>
+
+  <div class="page">
+
+    <!-- ── SQUATS ── -->
+    <div class="ex-panel" id="tab-squats">
+
+      <div class="hero-card blue">
+        <div class="hero-icon"><i class="fas fa-child"></i></div>
+        <div>
+          <div class="hero-title">Squats</div>
+          <div class="hero-sub">Lower Body · Beginner–Intermediate</div>
+          <div class="hero-tags">
+            <span class="tag">Quadriceps</span>
+            <span class="tag">Glutes</span>
+            <span class="tag">Hamstrings</span>
+            <span class="tag">Core</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="card">
+          <div class="card-title"><i class="fas fa-list-ol"></i> How to Perform</div>
+          <ol class="steps">
+            <li>Stand with feet shoulder-width apart, toes slightly turned out.</li>
+            <li>Keep your chest up and back straight throughout the movement.</li>
+            <li>Push your hips back and bend your knees to lower down.</li>
+            <li>Lower until thighs are parallel to the floor (90° knee angle).</li>
+            <li>Drive through your heels to return to standing position.</li>
+            <li>Keep knees aligned over toes — do not let them cave inward.</li>
+          </ol>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><i class="fas fa-camera"></i> Camera Setup</div>
+          <div class="setup-steps">
+            <div class="setup-item">
+              <div class="setup-num">1</div>
+              <div>Place camera at <strong>hip height</strong>, 6–8 feet away.</div>
+            </div>
+            <div class="setup-item">
+              <div class="setup-num">2</div>
+              <div>Stand <strong>sideways</strong> — left side facing camera.</div>
+            </div>
+            <div class="setup-item">
+              <div class="setup-num">3</div>
+              <div>Ensure <strong>full body</strong> is visible — head to toe.</div>
+            </div>
+            <div class="setup-item">
+              <div class="setup-num">4</div>
+              <div>Good <strong>lighting</strong> — avoid backlighting.</div>
+            </div>
+          </div>
+
+          <div class="angle-info">
+            <div class="angle-row">
+              <span>Standing</span>
+              <div class="angle-bar"><div class="angle-fill" style="width:100%; background:#10b981;"></div></div>
+              <span class="angle-val">&gt;160°</span>
+            </div>
+            <div class="angle-row">
+              <span>Good Squat</span>
+              <div class="angle-bar"><div class="angle-fill" style="width:60%; background:#2563eb;"></div></div>
+              <span class="angle-val">90–130°</span>
+            </div>
+            <div class="angle-row">
+              <span>Too Deep</span>
+              <div class="angle-bar"><div class="angle-fill" style="width:25%; background:#ef4444;"></div></div>
+              <span class="angle-val">&lt;60°</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="card">
+          <div class="card-title"><i class="fas fa-check-circle"></i> Good Form Tips</div>
+          <div class="tips-list">
+            <div class="tip good"><i class="fas fa-check"></i> Keep chest lifted and core tight</div>
+            <div class="tip good"><i class="fas fa-check"></i> Knees track over toes</div>
+            <div class="tip good"><i class="fas fa-check"></i> Heels stay flat on ground</div>
+            <div class="tip good"><i class="fas fa-check"></i> Breathe in going down, out going up</div>
+            <div class="tip bad"><i class="fas fa-times"></i> Don't let knees cave inward</div>
+            <div class="tip bad"><i class="fas fa-times"></i> Don't round your lower back</div>
+            <div class="tip bad"><i class="fas fa-times"></i> Don't lift heels off the ground</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><i class="fas fa-layer-group"></i> Difficulty Levels</div>
+          <div class="levels">
+            <div class="level-item">
+              <div class="level-badge green">Beginner</div>
+              <div class="level-desc">Bodyweight squat, 3×10 reps</div>
+            </div>
+            <div class="level-item">
+              <div class="level-badge blue">Intermediate</div>
+              <div class="level-desc">Goblet squat, 3×12 reps</div>
+            </div>
+            <div class="level-item">
+              <div class="level-badge amber">Advanced</div>
+              <div class="level-desc">Barbell squat, 4×8 reps</div>
+            </div>
+          </div>
+
+          <div class="start-btn-wrap">
+            <button class="start-ex-btn" onclick="window.location.href='start_workout.html'">
+              <i class="fas fa-play"></i> Start Squats Session
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── BICEP CURLS ── -->
+    <div class="ex-panel hidden" id="tab-bicep">
+
+      <div class="hero-card green">
+        <div class="hero-icon"><i class="fas fa-dumbbell"></i></div>
+        <div>
+          <div class="hero-title">Bicep Curls</div>
+          <div class="hero-sub">Upper Body · Beginner</div>
+          <div class="hero-tags">
+            <span class="tag">Biceps</span>
+            <span class="tag">Forearms</span>
+            <span class="tag">Shoulders</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="card">
+          <div class="card-title"><i class="fas fa-list-ol"></i> How to Perform</div>
+          <ol class="steps">
+            <li>Stand upright, feet shoulder-width apart, dumbbells at your sides.</li>
+            <li>Keep elbows close to your torso throughout the movement.</li>
+            <li>Curl the weights up by contracting your biceps.</li>
+            <li>Raise until forearms are vertical and dumbbells near your shoulders.</li>
+            <li>Slowly lower back to the starting position with control.</li>
+            <li>Avoid swinging your body — use only your arms.</li>
+          </ol>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><i class="fas fa-camera"></i> Camera Setup</div>
+          <div class="setup-steps">
+            <div class="setup-item">
+              <div class="setup-num">1</div>
+              <div>Place camera at <strong>elbow height</strong>, 4–6 feet away.</div>
+            </div>
+            <div class="setup-item">
+              <div class="setup-num">2</div>
+              <div>Stand <strong>sideways</strong> to camera — full arm visible.</div>
+            </div>
+            <div class="setup-item">
+              <div class="setup-num">3</div>
+              <div>Ensure <strong>shoulder to wrist</strong> is in frame.</div>
+            </div>
+            <div class="setup-item">
+              <div class="setup-num">4</div>
+              <div>Keep background <strong>plain and bright</strong>.</div>
+            </div>
+          </div>
+
+          <div class="angle-info">
+            <div class="angle-row">
+              <span>Extended</span>
+              <div class="angle-bar"><div class="angle-fill" style="width:100%; background:#10b981;"></div></div>
+              <span class="angle-val">&gt;150°</span>
+            </div>
+            <div class="angle-row">
+              <span>Good Curl</span>
+              <div class="angle-bar"><div class="angle-fill" style="width:35%; background:#2563eb;"></div></div>
+              <span class="angle-val">50–90°</span>
+            </div>
+            <div class="angle-row">
+              <span>Too Tight</span>
+              <div class="angle-bar"><div class="angle-fill" style="width:15%; background:#ef4444;"></div></div>
+              <span class="angle-val">&lt;30°</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="card">
+          <div class="card-title"><i class="fas fa-check-circle"></i> Good Form Tips</div>
+          <div class="tips-list">
+            <div class="tip good"><i class="fas fa-check"></i> Keep elbows stationary at sides</div>
+            <div class="tip good"><i class="fas fa-check"></i> Full range of motion each rep</div>
+            <div class="tip good"><i class="fas fa-check"></i> Control the lowering phase</div>
+            <div class="tip good"><i class="fas fa-check"></i> Keep wrists neutral</div>
+            <div class="tip bad"><i class="fas fa-times"></i> Don't swing your back</div>
+            <div class="tip bad"><i class="fas fa-times"></i> Don't flare elbows outward</div>
+            <div class="tip bad"><i class="fas fa-times"></i> Don't use momentum</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><i class="fas fa-layer-group"></i> Difficulty Levels</div>
+          <div class="levels">
+            <div class="level-item">
+              <div class="level-badge green">Beginner</div>
+              <div class="level-desc">Light dumbbells, 3×12 reps</div>
+            </div>
+            <div class="level-item">
+              <div class="level-badge blue">Intermediate</div>
+              <div class="level-desc">Moderate weight, 4×10 reps</div>
+            </div>
+            <div class="level-item">
+              <div class="level-badge amber">Advanced</div>
+              <div class="level-desc">Heavy weight + slow negatives, 4×8</div>
+            </div>
+          </div>
+
+          <div class="start-btn-wrap">
+            <button class="start-ex-btn" onclick="window.location.href='start_workout.html'">
+              <i class="fas fa-play"></i> Start Bicep Curls Session
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PUSHUPS ── -->
+    <div class="ex-panel hidden" id="tab-pushups">
+
+      <div class="hero-card amber">
+        <div class="hero-icon"><i class="fas fa-align-center"></i></div>
+        <div>
+          <div class="hero-title">Pushups</div>
+          <div class="hero-sub">Upper Body & Core · Beginner–Advanced</div>
+          <div class="hero-tags">
+            <span class="tag">Chest</span>
+            <span class="tag">Triceps</span>
+            <span class="tag">Shoulders</span>
+            <span class="tag">Core</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="card">
+          <div class="card-title"><i class="fas fa-list-ol"></i> How to Perform</div>
+          <ol class="steps">
+            <li>Start in a high plank — hands slightly wider than shoulder-width.</li>
+            <li>Keep body in a straight line from head to heels.</li>
+            <li>Lower your chest toward the floor by bending elbows.</li>
+            <li>Go down until chest nearly touches the floor.</li>
+            <li>Push back up to the starting position with full arm extension.</li>
+            <li>Keep core tight throughout — don't let hips sag or rise.</li>
+          </ol>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><i class="fas fa-camera"></i> Camera Setup</div>
+          <div class="setup-steps">
+            <div class="setup-item">
+              <div class="setup-num">1</div>
+              <div>Place camera <strong>low on the floor</strong>, side view.</div>
+            </div>
+            <div class="setup-item">
+              <div class="setup-num">2</div>
+              <div>Camera should capture <strong>full body profile</strong>.</div>
+            </div>
+            <div class="setup-item">
+              <div class="setup-num">3</div>
+              <div>Ensure <strong>shoulder, elbow, wrist</strong> all visible.</div>
+            </div>
+            <div class="setup-item">
+              <div class="setup-num">4</div>
+              <div>Use a <strong>bright room</strong> for best detection.</div>
+            </div>
+          </div>
+
+          <div class="angle-info">
+            <div class="angle-row">
+              <span>Top Position</span>
+              <div class="angle-bar"><div class="angle-fill" style="width:100%; background:#10b981;"></div></div>
+              <span class="angle-val">&gt;160°</span>
+            </div>
+            <div class="angle-row">
+              <span>Good Pushup</span>
+              <div class="angle-bar"><div class="angle-fill" style="width:55%; background:#2563eb;"></div></div>
+              <span class="angle-val">90–110°</span>
+            </div>
+            <div class="angle-row">
+              <span>Too Low</span>
+              <div class="angle-bar"><div class="angle-fill" style="width:20%; background:#ef4444;"></div></div>
+              <span class="angle-val">&lt;60°</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="card">
+          <div class="card-title"><i class="fas fa-check-circle"></i> Good Form Tips</div>
+          <div class="tips-list">
+            <div class="tip good"><i class="fas fa-check"></i> Keep body in straight line</div>
+            <div class="tip good"><i class="fas fa-check"></i> Elbows at 45° from body</div>
+            <div class="tip good"><i class="fas fa-check"></i> Full arm extension at top</div>
+            <div class="tip good"><i class="fas fa-check"></i> Look down — neutral neck</div>
+            <div class="tip bad"><i class="fas fa-times"></i> Don't let hips sag</div>
+            <div class="tip bad"><i class="fas fa-times"></i> Don't flare elbows at 90°</div>
+            <div class="tip bad"><i class="fas fa-times"></i> Don't hold breath</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><i class="fas fa-layer-group"></i> Difficulty Levels</div>
+          <div class="levels">
+            <div class="level-item">
+              <div class="level-badge green">Beginner</div>
+              <div class="level-desc">Knee pushups, 3×10 reps</div>
+            </div>
+            <div class="level-item">
+              <div class="level-badge blue">Intermediate</div>
+              <div class="level-desc">Standard pushups, 3×15 reps</div>
+            </div>
+            <div class="level-item">
+              <div class="level-badge amber">Advanced</div>
+              <div class="level-desc">Diamond / decline pushups, 4×12</div>
+            </div>
+          </div>
+
+          <div class="start-btn-wrap">
+            <button class="start-ex-btn" onclick="window.location.href='start_workout.html'">
+              <i class="fas fa-play"></i> Start Pushups Session
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="js/exercises.js"></script>
+</body>
+</html>

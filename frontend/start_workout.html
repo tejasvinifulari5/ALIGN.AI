@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ALIGN.AI - Select Exercise</title>
+
+    <!-- UI Assets -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/start_workout.css">
+
+</head>
+<body>
+
+    <div class="app-container">
+        <header class="header">
+            <a href="dashboard.html" class="back-btn" title="Back to Dashboard">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <h1 class="flex-1 text-center font-bold text-lg pr-10">Select Exercise</h1>
+        </header>
+
+        <main class="selection-content">
+            <!-- New Guide Section to fill space and add value -->
+            <div class="setup-guide">
+                <div class="guide-icon">
+                    <i class="fas fa-info-circle"></i>
+                </div>
+                <div>
+                    <h4 class="font-bold text-sm text-blue-900">Pro Tip</h4>
+                    <p class="text-xs text-blue-700 leading-relaxed">Ensure your background is clear and you are standing in a well-lit area for the best AI accuracy.</p>
+                </div>
+            </div>
+
+            <div class="exercise-list">
+                <label class="exercise-option" onclick="handleSelect(this)">
+                    <input type="radio" name="exercise" value="bicep_curls">
+                    <div class="exercise-visual">
+                        <i class="fas fa-dumbbell"></i>
+                    </div>
+                    <div class="exercise-info">
+                        <span class="exercise-name">Bicep Curls</span>
+                        <span class="exercise-meta">Side Profile Tracking</span>
+                    </div>
+                    <div class="radio-custom"></div>
+                </label>
+
+                <label class="exercise-option" onclick="handleSelect(this)">
+                    <input type="radio" name="exercise" value="squats">
+                    <div class="exercise-visual">
+                        <i class="fas fa-child"></i>
+                    </div>
+                    <div class="exercise-info">
+                        <span class="exercise-name">Squats</span>
+                        <span class="exercise-meta">Lower Body Alignment</span>
+                    </div>
+                    <div class="radio-custom"></div>
+                </label>
+
+                <label class="exercise-option" onclick="handleSelect(this)">
+                    <input type="radio" name="exercise" value="pushups">
+                    <div class="exercise-visual">
+                        <i class="fas fa-align-center"></i>
+                    </div>
+                    <div class="exercise-info">
+                        <span class="exercise-name">Pushups</span>
+                        <span class="exercise-meta">Upper Body & Core</span>
+                    </div>
+                    <div class="radio-custom"></div>
+                </label>
+            </div>
+        </main>
+
+        <footer class="action-footer">
+            <button id="cameraBtn" class="primary-btn">
+                <span id="btnText">Start Camera</span>
+                <div id="btnLoader" class="loader"></div>
+            </button>
+        </footer>
+    </div>
+
+    <div id="modal">
+        <div class="modal-content">
+            <div class="w-20 h-20 bg-blue-50 text-blue-600 rounded-3xl flex items-center justify-center mx-auto mb-6">
+                <i class="fas fa-video fa-2x"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-slate-900 mb-3">Ready to Start?</h3>
+            <p id="modalText" class="text-slate-600 mb-8 px-4 leading-relaxed"></p>
+            <button onclick="closeModal()" class="w-full py-4 bg-blue-600 hover:bg-blue-700 rounded-2xl font-bold text-white shadow-lg shadow-blue-200 transition-all">
+                Let's Go
+            </button>
+        </div>
+    </div>
+    <script src="js/start_workout.js"></script>
+
+</body>
+</html>

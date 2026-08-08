@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ALIGN.AI - Live Session</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/workout_session.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-left">
+      <span class="brand">ALIGN.AI</span>
+      <div class="live-badge">
+        <div class="dot-live"></div> Live
+      </div>
+    </div>
+    <div class="timer" id="timerDisplay">00:00</div>
+    <div style="font-size:0.8rem; opacity:0.85;" id="exerciseLabel">—</div>
+  </header>
+
+  <!-- Main -->
+  <div class="main">
+
+    <!-- Camera Side -->
+    <div class="camera-side" style="position:relative;">
+
+      <!-- Countdown Overlay -->
+      <div class="connecting-overlay" id="countdownOverlay">
+        <div id="countdownNum" style="font-size:6rem; font-weight:900; color:white; line-height:1;">3</div>
+        <p style="color:#93c5fd; font-size:1rem; font-weight:600; margin-top:0.5rem;">Get Ready!</p>
+        <p style="color:#cbd5e1; font-size:0.8rem; margin-top:0.25rem;">Camera will open shortly...</p>
+      </div>
+
+      <!-- Live webcam feed — mirrored -->
+      <video id="webcamFeed" autoplay playsinline
+        style="display:none;">
+      </video>
+
+      <!-- Exercise tag top left -->
+      <div class="exercise-tag" id="exerciseTag">—</div>
+
+      <!-- ✅ Pause + Stop buttons — overlaid at bottom center of camera -->
+      <div style="position:absolute; bottom:1.25rem; left:50%; transform:translateX(-50%); display:flex; gap:0.75rem; z-index:20;">
+        <button onclick="togglePause()" id="pauseBtn"
+          style="padding:0.65rem 1.5rem; background:rgba(255,255,255,0.93); border:none; border-radius:999px; font-weight:700; font-size:0.85rem; cursor:pointer; display:flex; align-items:center; gap:0.5rem; box-shadow:0 4px 16px rgba(0,0,0,0.25);">
+          <i class="fas fa-pause"></i> Pause
+        </button>
+        <button onclick="stopSession()"
+          style="padding:0.65rem 1.5rem; background:rgba(220,38,38,0.93); color:white; border:none; border-radius:999px; font-weight:700; font-size:0.85rem; cursor:pointer; display:flex; align-items:center; gap:0.5rem; box-shadow:0 4px 16px rgba(0,0,0,0.25);">
+          <i class="fas fa-stop"></i> Stop Session
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Analysis Panel -->
+    <div class="analysis-panel">
+      <div class="panel-header"><i class="fas fa-bolt" style="margin-right:6px;"></i>Real-Time Analysis</div>
+
+      <!-- Angles -->
+      <div class="section">
+        <div class="section-label">Joint Angles</div>
+        <div class="angle-grid">
+          <div class="angle-card">
+            <span class="angle-val" id="kneeAngle">—°</span>
+            <div class="angle-lbl">Joint Angle</div>
+          </div>
+          <div class="angle-card">
+            <span class="angle-val" style="font-size:1rem; padding-top:0.3rem;" id="postureStage">—</span>
+            <div class="angle-lbl">Stage</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scores -->
+      <div class="section">
+        <div class="section-label">Performance Scores</div>
+        <div class="score-row">
+          <span class="score-name">Stability</span>
+          <div class="score-bar-wrap"><div class="score-bar-fill" id="stabilityBar" style="width:0%"></div></div>
+          <span class="score-num" id="stabilityVal">—</span>
+        </div>
+        <div class="score-row">
+          <span class="score-name">Posture</span>
+          <div class="score-bar-wrap"><div class="score-bar-fill" id="postureBar" style="width:0%"></div></div>
+          <span class="score-num" id="postureVal">—</span>
+        </div>
+      </div>
+
+      <!-- Reps -->
+      <div class="reps-section">
+        <div>
+          <div class="reps-big" id="repCount">0</div>
+          <div class="reps-lbl">Reps Completed</div>
+        </div>
+        <div class="stage-pill" id="stagePill">Ready</div>
+      </div>
+
+      <!-- Feedback -->
+      <div class="section" style="flex:1;">
+        <div class="section-label">AI Feedback</div>
+        <div class="feedback-box">
+          <div style="font-size:1rem; margin-bottom:0.4rem;">💡</div>
+          <div class="feedback-text" id="feedbackText">Waiting for exercise to begin...</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="js/workout_session.js"></script>
+</body>
+</html>

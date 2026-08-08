@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ALIGN.AI - Workout Summary</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/workout_summary.css">
+</head>
+<body>
+
+  <div class="card">
+
+    <!-- Score Header -->
+    <div class="score-header">
+      <div class="score-ring">
+        <span class="score-val" id="scoreVal">--</span>
+      </div>
+      <h1 class="summary-title">Workout Summary 🎉</h1>
+      <div class="rating-badge" id="ratingBadge">--</div>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="stats-grid">
+      <div class="stat-box">
+        <span class="stat-val" id="statReps">--</span>
+        <span class="stat-lbl">Total Reps</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-val" id="statScore">--</span>
+        <span class="stat-lbl">Score</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-val" id="statRepTime">--</span>
+        <span class="stat-lbl">Avg Rep</span>
+      </div>
+    </div>
+
+    <!-- Details -->
+    <div class="details">
+      <div class="section-label">Session Info</div>
+      <div class="detail-row">
+        <span class="detail-key"><i class="fas fa-dumbbell"></i> Exercise</span>
+        <span class="detail-val" id="detExercise">--</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-key"><i class="fas fa-calendar"></i> Date</span>
+        <span class="detail-val" id="detDate">--</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-key"><i class="fas fa-clock"></i> Duration</span>
+        <span class="detail-val" id="detDuration">--</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-key"><i class="fas fa-star"></i> Overall</span>
+        <span class="detail-val" id="detRating">--</span>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="actions">
+      <button class="btn btn-primary" onclick="window.location.href='start_workout.html'">
+        <i class="fas fa-redo"></i> Start New Session
+      </button>
+      <button class="btn btn-secondary" onclick="window.location.href='dashboard.html'">
+        <i class="fas fa-home"></i> Back to Dashboard
+      </button>
+      <button class="btn btn-ghost" onclick="window.location.href='progress.html'">
+        <i class="fas fa-chart-line"></i> View Progress
+      </button>
+    </div>
+
+    <div class="footer-note">&copy; 2026 ALIGN.AI</div>
+  </div>
+  <script src="js/workout_summary.js"></script>
+
+  
+</body>
+</html>

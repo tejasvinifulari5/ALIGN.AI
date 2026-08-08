@@ -1,0 +1,5 @@
+Tech stack
+Flask
+Mongo DB 
+
+
