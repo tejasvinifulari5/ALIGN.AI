@@ -2,7 +2,7 @@ let isEditMode = false;
 let currentView = "main";
 
 // ✅ Load real user data on page load
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
 
     const currentUser = localStorage.getItem("alignai_current_user");
     if (!currentUser) {
@@ -10,38 +10,47 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
 
-    const user = JSON.parse(currentUser);
-    const users = JSON.parse(localStorage.getItem("alignai_users") || "{}");
-    const userData = users[user.username] || {};
+    const cachedUser = JSON.parse(currentUser);
+    if (!cachedUser.id) {
+        localStorage.removeItem("alignai_current_user");
+        window.location.href = "login.html";
+        return;
+    }
 
-    // Fill in real user data
-    document.getElementById("display-name-heading").innerText = (user.name || user.username) + " 👋";
-    document.getElementById("input-name").value   = user.name  || user.username || "";
-    document.getElementById("input-email").value  = user.email || "";
-    document.getElementById("input-weight").value = userData.weight || "";
-    document.getElementById("input-height").value = userData.height || "";
+    try {
+        // Fetch User Info
+        const profileRes = await fetch(`http://127.0.0.1:5500/profile/${cachedUser.id}`);
+        const profileData = await profileRes.json();
 
-    // Avatar initial
-    const initial = (user.name || user.username || "U")[0].toUpperCase();
-    document.getElementById("avatar-initial").innerText = initial;
+        if (profileData.success && profileData.user) {
+            const user = profileData.user;
+            document.getElementById("display-name-heading").innerText = (user.full_name || user.username) + " 👋";
+            document.getElementById("input-name").value   = user.full_name || user.username || "";
+            document.getElementById("input-email").value  = user.email || "";
+            document.getElementById("input-weight").value = user.weight || "";
+            document.getElementById("input-height").value = user.height || "";
 
-    // Email under avatar
-    const emailDisplay = document.querySelector(".text-gray-500.font-medium");
-    if (emailDisplay) emailDisplay.innerText = user.email || "";
+            const initial = (user.full_name || user.username || "U")[0].toUpperCase();
+            document.getElementById("avatar-initial").innerText = initial;
 
-    // Workout stats for goal progress
-    const historyKey = `alignai_history_${user.username}`;
-    const history = JSON.parse(localStorage.getItem(historyKey) || "[]");
-    const best = history.length > 0
-        ? Math.max(...history.map(h => parseFloat(h.score) || 0))
-        : 0;
+            const emailDisplay = document.querySelector(".text-gray-500.font-medium");
+            if (emailDisplay) emailDisplay.innerText = user.email || "";
+        }
 
-    const progressBar = document.querySelector(".bg-blue-600.h-3.rounded-full");
-    const progressLabel = document.querySelector(".text-2xl.font-black.text-blue-600");
-    if (progressBar && progressLabel) {
-        const pct = Math.min(best, 100);
-        progressBar.style.width = pct + "%";
-        progressLabel.innerText = pct.toFixed(0) + "%";
+        // Fetch Stats for Goal Progress Circle
+        const dashRes = await fetch(`http://127.0.0.1:5500/dashboard/${cachedUser.id}`);
+        const dashData = await dashRes.json();
+        const best = (dashData.success && dashData.stats) ? parseFloat(dashData.stats.best_stability || 0) : 0;
+
+        const progressBar = document.querySelector(".bg-blue-600.h-3.rounded-full");
+        const progressLabel = document.querySelector(".text-2xl.font-black.text-blue-600");
+        if (progressBar && progressLabel) {
+            const pct = Math.min(best, 100);
+            progressBar.style.width = pct + "%";
+            progressLabel.innerText = pct.toFixed(0) + "%";
+        }
+    } catch(err) {
+        console.error(err);
     }
 
     // ✅ Hide save button initially
@@ -150,20 +159,30 @@ async function saveChanges() {
     const newWeight = document.getElementById("input-weight").value;
     const newHeight = document.getElementById("input-height").value;
 
-    // ✅ Save to localStorage
+    // ✅ Save to DB via fetch
     const currentUser = JSON.parse(localStorage.getItem("alignai_current_user"));
-    const users = JSON.parse(localStorage.getItem("alignai_users") || "{}");
 
-    if (currentUser && users[currentUser.username]) {
-        users[currentUser.username].name   = newName;
-        users[currentUser.username].email  = newEmail;
-        users[currentUser.username].weight = newWeight;
-        users[currentUser.username].height = newHeight;
-        localStorage.setItem("alignai_users", JSON.stringify(users));
-
-        currentUser.name  = newName;
-        currentUser.email = newEmail;
-        localStorage.setItem("alignai_current_user", JSON.stringify(currentUser));
+    if (currentUser && currentUser.id) {
+        try {
+            await fetch("http://127.0.0.1:5500/profile", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    user_id: currentUser.id,
+                    full_name: newName,
+                    email: newEmail,
+                    weight: newWeight,
+                    height: newHeight
+                })
+            });
+            
+            // Update cached storage logic slightly
+            currentUser.full_name = newName;
+            currentUser.email = newEmail;
+            localStorage.setItem("alignai_current_user", JSON.stringify(currentUser));
+        } catch(e) {
+            console.error("Profile save error:", e);
+        }
     }
 
     // Update display
